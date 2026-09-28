@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BBS International School | Prayagraj</title>
+<style>
+:root{--navy:#071b46;--navy2:#0d2d69;--gold:#e9b52f;--gold2:#f5cc63;--ink:#15213b;--muted:#68758a;--bg:#f6f8fc;--green:#10b981;--red:#ef4444}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:0;background:none}
+input,textarea,select{font-family:inherit}
+.container{width:min(1160px,92%);margin:auto}
+.hidden{display:none!important}
+
+/* LOGIN */
+#login{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy),var(--navy2));display:flex;align-items:center;justify-content:center;padding:20px;z-index:99999}
+.login-box{background:#fff;border-radius:20px;padding:36px;width:100%;max-width:400px;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.login-logo{width:70px;height:70px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-family:Georgia,serif;font-size:24px;font-weight:800;margin:0 auto 16px}
+.login-box h1{font-family:Georgia,serif;color:var(--navy);text-align:center;margin-bottom:6px;font-size:22px}
+.login-box>p{text-align:center;color:var(--muted);font-size:13px;margin-bottom:24px}
+.login-box label{display:block;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px;margin-top:12px}
+.login-box input{width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px}
+.login-box input:focus{outline:none;border-color:var(--gold)}
+.login-box input:disabled{background:#f1f5f9;cursor:not-allowed}
+.login-box button{width:100%;padding:13px;border-radius:10px;background:var(--navy);color:#fff;font-weight:700;font-size:15px;margin-top:20px;transition:.2s}
+.login-box button:hover{background:var(--navy2)}
+.login-box button:disabled{opacity:.5;cursor:not-allowed}
+.login-err{background:#fee2e2;color:#991b1b;padding:10px;border-radius:8px;font-size:13px;margin-top:12px;text-align:center;display:none}
+.login-hint{text-align:center;font-size:12px;color:var(--muted);margin-top:16px;padding-top:14px;border-top:1px solid #eef2f7}
+
+/* SITE */
+.topbar{background:var(--navy);color:#fff;font-size:13px;padding:10px 0}
+.topbar .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.topbar a{color:#fff}
+.header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e9edf4;padding:14px 0}
+.header .container{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-logo{width:52px;height:52px;border-radius:50%;overflow:hidden;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-family:Georgia,serif;font-weight:800;font-size:16px;flex-shrink:0}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+.brand-title{font-family:Georgia,serif;font-weight:800;font-size:20px;color:var(--navy);line-height:1.1}
+.brand-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.nav{display:flex;gap:22px;align-items:center;font-weight:700;font-size:14px;flex-wrap:wrap}
+.nav a:hover{color:#b07e05}
+.nav-cta{background:var(--gold);color:#171717;padding:10px 16px;border-radius:10px}
+
+.hero{color:#fff;padding:100px 0;position:relative;background:linear-gradient(90deg,rgba(4,18,49,.92),rgba(4,18,49,.6)),radial-gradient(circle at 70% 50%,#1a3a7a,#071b46);background-size:cover;background-position:center;overflow:hidden}
+.hero.has-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero.has-video::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,18,49,.92),rgba(4,18,49,.6));z-index:1}
+.hero .container{position:relative;z-index:2}
+.kicker{display:inline-flex;align-items:center;gap:10px;color:var(--gold2);font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:12px;margin-bottom:16px}
+.kicker::before{content:"";width:30px;height:2px;background:var(--gold)}
+.hero h1{font-family:Georgia,serif;font-size:clamp(36px,6vw,64px);line-height:1.05;margin-bottom:20px}
+.hero h1 span{color:var(--gold2)}
+.hero p{font-size:17px;color:#eef4ff;max-width:600px;margin-bottom:28px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border-radius:11px;font-weight:700;font-size:14px;transition:.2s}
+.btn-primary{background:var(--gold);color:#171717}
+.btn-primary:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-outline{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.4)}
+
+.quick{margin-top:-40px;position:relative;z-index:5}
+.quick-grid{background:#fff;border-radius:16px;box-shadow:0 15px 45px rgba(7,27,70,.12);display:grid;grid-template-columns:repeat(3,1fr);overflow:hidden}
+.quick-item{padding:22px;display:flex;gap:14px;border-right:1px solid #eef2f7}
+.quick-item:last-child{border:0}
+.quick-icon{width:44px;height:44px;border-radius:12px;background:#fff4cf;color:#9a7000;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.quick-item b{display:block;color:var(--navy);margin-bottom:4px;font-size:15px}
+.quick-item span{font-size:13px;color:var(--muted)}
+
+section{padding:80px 0}
+.sec-head{max-width:720px;margin:0 auto 44px;text-align:center}
+.sec-head .eyebrow{color:#a77705;font-size:12px;letter-spacing:2px;font-weight:900;text-transform:uppercase}
+.sec-head h2{font-family:Georgia,serif;color:var(--navy);font-size:clamp(28px,4vw,42px);margin:12px 0}
+.sec-head p{color:var(--muted)}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#fff;border:1px solid #e7ebf2;border-radius:16px;padding:24px;transition:.2s}
+.card:hover{box-shadow:0 12px 30px rgba(7,27,70,.08);transform:translateY(-2px)}
+.card-ico{font-size:28px;margin-bottom:14px}
+.card h3{color:var(--navy);margin-bottom:8px;font-size:17px}
+.card p{color:var(--muted);font-size:14px}
+.card img,.card video{width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:12px}
+
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.about-media{border-radius:20px;overflow:hidden;height:400px;background:linear-gradient(135deg,var(--navy),var(--navy2))}
+.about-media img,.about-media video{width:100%;height:100%;object-fit:cover}
+.about-media.placeholder{display:grid;place-items:center;color:#fff;font-size:60px}
+.about-copy h3{font-family:Georgia,serif;color:var(--navy);font-size:28px;margin-bottom:14px}
+.about-copy p{color:#59667a;line-height:1.8;margin-bottom:16px}
+.points{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.point{background:#fff;padding:14px;border-radius:12px;border:1px solid #e7ebf2}
+.point b{display:block;color:var(--navy);font-size:13px;margin-bottom:4px}
+.point span{font-size:12px;color:var(--muted)}
+
+.principal{background:#eef3fb}
+.principal-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:44px;align-items:center}
+.principal-media{border-radius:20px;overflow:hidden;height:480px;background:linear-gradient(135deg,var(--navy),var(--navy2))}
+.principal-media img{width:100%;height:100%;object-fit:cover}
+.principal-media.placeholder{display:grid;place-items:center;color:#fff;font-size:80px}
+.principal-copy h2{font-family:Georgia,serif;color:var(--navy);font-size:34px;margin-bottom:12px}
+.principal-role{color:#a77705;font-weight:800;letter-spacing:1px;margin-bottom:16px;font-size:13px}
+.principal-copy p{color:#59667a;line-height:1.8;margin-bottom:14px}
+
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.gal-item{border-radius:16px;overflow:hidden;background:#fff;border:1px solid #e8edf4;transition:.3s}
+.gal-item:hover{transform:translateY(-4px);box-shadow:0 15px 35px rgba(7,27,70,.1)}
+.gal-media{height:220px;background:linear-gradient(135deg,#dbeafe,#93c5fd);position:relative;overflow:hidden}
+.gal-media img,.gal-media video,.gal-media iframe{width:100%;height:100%;object-fit:cover;border:0}
+.gal-media.placeholder{display:grid;place-items:center;font-size:50px;color:#fff}
+.gal-cap{padding:14px;font-weight:700;color:var(--navy);font-size:14px}
+
+.admission{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:24px;padding:44px;display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap}
+.admission h2{font-family:Georgia,serif;font-size:30px;margin-bottom:10px}
+.admission p{color:#dce6f7;max-width:600px}
+
+.contact{background:#061633;color:#fff}
+.contact-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:36px}
+.contact h2,.contact h3{font-family:Georgia,serif;margin-bottom:14px}
+.contact h2{font-size:26px}
+.contact h3{font-size:18px}
+.contact p,.contact li{color:#cad6ea;line-height:1.9;font-size:14px}
+.contact ul{list-style:none}
+.footer{background:#031027;color:#aebbd2;text-align:center;padding:18px;font-size:12px}
+
+.float-admin{position:fixed;bottom:20px;right:20px;z-index:99;background:var(--navy);color:#fff;padding:14px 20px;border-radius:50px;font-weight:700;font-size:14px;box-shadow:0 10px 30px rgba(7,27,70,.4);display:flex;align-items:center;gap:8px}
+
+/* ADMIN */
+#admin{display:none;position:fixed;inset:0;background:var(--bg);z-index:9998;overflow-y:auto}
+#admin.active{display:block}
+.admin-top{background:var(--navy);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;flex-wrap:wrap;gap:10px}
+.admin-top h2{font-family:Georgia,serif;font-size:18px;display:flex;align-items:center;gap:10px}
+.admin-top .btns{display:flex;gap:8px;flex-wrap:wrap}
+.abd{padding:8px 14px;border-radius:8px;font-weight:700;font-size:12.5px;transition:.15s}
+.abd.gold{background:var(--gold);color:#171717}
+.abd.white{background:#fff;color:var(--navy)}
+.abd.red{background:#ef4444;color:#fff}
+.abd.green{background:var(--green);color:#fff}
+.abd:hover{transform:translateY(-1px)}
+.admin-body{padding:24px;max-width:1100px;margin:auto}
+.admin-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px;border-bottom:2px solid #e7ebf2;padding-bottom:12px}
+.admin-tab{padding:9px 16px;border-radius:9px;background:#fff;border:1px solid #e7ebf2;font-weight:700;font-size:13px;color:var(--muted);transition:.15s}
+.admin-tab:hover{color:var(--navy)}
+.admin-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.admin-panel{display:none}
+.admin-panel.active{display:block}
+.admin-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 4px 15px rgba(7,27,70,.05);margin-bottom:18px}
+.admin-card h3{font-family:Georgia,serif;color:var(--navy);margin-bottom:16px;font-size:18px;padding-bottom:12px;border-bottom:1px solid #eef2f7}
+.admin-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.admin-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.af{margin-bottom:16px}
+.af label{display:block;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.af input,.af textarea{width:100%;padding:10px 12px;border:2px solid #e2e8f0;border-radius:9px;font-size:13px;background:#f8fafc}
+.af input:focus,.af textarea:focus{outline:none;border-color:var(--gold);background:#fff}
+.af textarea{resize:vertical;min-height:80px;line-height:1.6}
+.af small{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+
+.up{border:2px dashed #cbd5e1;border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:#f8fafc;transition:.15s}
+.up:hover{border-color:var(--gold);background:#fffdf5}
+.up input{display:none}
+.up .up-ico{font-size:30px;margin-bottom:6px;opacity:.6}
+.up .up-txt{font-size:13px;font-weight:700;color:var(--navy)}
+.up .up-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.prev{margin-top:12px;border-radius:12px;overflow:hidden;border:1px solid #e7ebf2;position:relative;display:none;max-width:260px}
+.prev.show{display:block}
+.prev img,.prev video{width:100%;height:150px;object-fit:cover;display:block}
+.prev .x{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:8px;background:rgba(239,68,68,.9);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:800}
+.prev .x:hover{background:var(--red)}
+
+.up-tabs{display:flex;gap:6px;margin-bottom:12px}
+.up-tab{padding:7px 14px;border-radius:8px;background:#f1f5f9;font-size:12px;font-weight:700;color:var(--muted);border:1px solid #e2e8f0}
+.up-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.rep{background:#fff;border:1px solid #e7ebf2;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.rep .r-thumb{width:70px;height:70px;border-radius:10px;overflow:hidden;background:#eef2f7;display:grid;place-items:center;flex-shrink:0;font-size:26px;color:#94a3b8}
+.rep .r-thumb img,.rep .r-thumb video{width:100%;height:100%;object-fit:cover}
+.rep .r-body{flex:1;min-width:200px}
+.rep .r-act{display:flex;gap:6px}
+.ib{width:34px;height:34px;border-radius:8px;background:#f1f5f9;color:var(--navy);display:grid;place-items:center;font-size:14px}
+.ib:hover{background:#e2e8f0}
+.ib.del{background:#fef2f2;color:var(--red)}
+.ib.del:hover{background:#fee2e2}
+
+.toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#fff;padding:14px 22px;border-radius:12px;font-weight:700;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.2);z-index:999999;animation:tin .3s ease}
+.toast.err{background:var(--red)}
+@keyframes tin{from{transform:translateX(400px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+@media(max-width:900px){
+ .nav{display:none}
+ .about-grid,.principal-grid,.admin-row,.admin-row3{grid-template-columns:1fr}
+ .contact-grid{grid-template-columns:1fr}
+ .quick-grid{grid-template-columns:1fr}
+ .quick-item{border-right:0;border-bottom:1px solid #eef2f7}
+ .admission{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN (NO PASSWORD HINT) ================= -->
+<div id="login">
+  <div class="login-box">
+    <div class="login-logo">BBS</div>
+    <h1>Admin Login</h1>
+    <p>BBS International School</p>
+    <label>Username</label>
+    <input type="text" id="uIn" placeholder="Enter username" autocomplete="username">
+    <label>Password</label>
+    <input type="password" id="pIn" placeholder="Enter password" autocomplete="current-password">
+    <button onclick="doLogin()" id="loginBtn">🔐 Sign In</button>
+    <div class="login-err" id="err">❌ Invalid credentials!</div>
+    <div class="login-hint">🔒 Authorized personnel only</div>
+  </div>
+</div>
+
+<!-- ================= ADMIN ================= -->
+<div id="admin">
+  <div class="admin-top">
+    <h2>⚙️ BBS Admin Panel</h2>
+    <div class="btns">
+      <button class="abd green" onclick="saveAll()">💾 Save All</button>
+      <button class="abd white" onclick="preview()">👁️ Preview</button>
+      <button class="abd gold" onclick="exportHTML()">📤 Export HTML</button>
+      <button class="abd red" onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+  <div class="admin-body">
+    <div class="admin-tabs" id="tabs">
+      <button class="admin-tab active" data-t="general">⚙️ General</button>
+      <button class="admin-tab" data-t="hero">🎨 Hero</button>
+      <button class="admin-tab" data-t="quick">⚡ Quick</button>
+      <button class="admin-tab" data-t="about">🏫 About</button>
+      <button class="admin-tab" data-t="academics">📚 Academics</button>
+      <button class="admin-tab" data-t="facilities">🔬 Facilities</button>
+      <button class="admin-tab" data-t="principal">👨‍🏫 Principal</button>
+      <button class="admin-tab" data-t="gallery">🖼️ Gallery</button>
+      <button class="admin-tab" data-t="videos">🎬 Videos</button>
+      <button class="admin-tab" data-t="contact">📞 Contact</button>
+      <button class="admin-tab" data-t="security">🔐 Security</button>
+    </div>
+
+    <!-- GENERAL -->
+    <div class="admin-panel active" data-p="general">
+      <div class="admin-card">
+        <h3>⚙️ General Settings</h3>
+        <div class="admin-row">
+          <div class="af"><label>School Name</label><input id="i_schoolName"></div>
+          <div class="af"><label>Tagline</label><input id="i_tagline"></div>
+        </div>
+        <div class="admin-row3">
+          <div class="af"><label>Phone</label><input id="i_phone"></div>
+          <div class="af"><label>Email</label><input id="i_email"></div>
+          <div class="af"><label>Address</label><input id="i_address"></div>
+        </div>
+      </div>
+      <div class="admin-card">
+        <h3>🖼️ School Logo</h3>
+        <div class="up" onclick="document.getElementById('i_logo_f').click()">
+          <input type="file" id="i_logo_f" accept="image/*" onchange="uploadFile(this,'logo','logoPrev')">
+          <div class="up-ico">🖼️</div>
+          <div class="up-txt">Click to upload logo</div>
+          <div class="up-sub">PNG, JPG — Square recommended</div>
+        </div>
+        <div class="prev" id="logoPrev"><img id="logoImg"><button class="x" onclick="rmImg('logo','logoPrev')">✕</button></div>
+        <div class="af" style="margin-top:12px"><label>Ya URL paste karo</label><input id="i_logo_url" placeholder="https://..."></div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="admin-panel" data-p="hero">
+      <div class="admin-card">
+        <h3>🎨 Hero Content</h3>
+        <div class="af"><label>Kicker Label</label><input id="i_kicker"></div>
+        <div class="admin-row">
+          <div class="af"><label>Heading Line 1</label><input id="i_line1"></div>
+          <div class="af"><label>Highlighted Text (Gold)</label><input id="i_highlight"></div>
+        </div>
+        <div class="af"><label>Heading Line 2</label><input id="i_line2"></div>
+        <div class="af"><label>Description</label><textarea id="i_heroDesc"></textarea></div>
+        <div class="admin-row">
+          <div class="af"><label>Primary Button Text</label><input id="i_btn1"></div>
+          <div class="af"><label>Primary Button Link</label><input id="i_btn1Link" placeholder="#about"></div>
+        </div>
+        <div class="admin-row">
+          <div class="af"><label>Secondary Button Text</label><input id="i_btn2"></div>
+          <div class="af"><label>Secondary Button Link</label><input id="i_btn2Link"></div>
+        </div>
+      </div>
+      <div class="admin-card">
+        <h3>🖼️ Hero Background</h3>
+        <div class="up-tabs">
+          <button class="up-tab active" onclick="switchUp('hero','img',this)">🖼️ Image</button>
+          <button class="up-tab" onclick="switchUp('hero','video',this)">🎬 Video</button>
+        </div>
+        <div id="heroUpImg">
+          <div class="up" onclick="document.getElementById('i_heroBg_f').click()">
+            <input type="file" id="i_heroBg_f" accept="image/*" onchange="uploadFile(this,'heroBg','heroBgPrev')">
+            <div class="up-ico">🌄</div>
+            <div class="up-txt">Upload hero background image</div>
+            <div class="up-sub">Recommended 1920x1080px</div>
+          </div>
+          <div class="prev" id="heroBgPrev" style="max-width:340px"><img id="heroBgImg"><button class="x" onclick="rmImg('heroBg','heroBgPrev')">✕</button></div>
+        </div>
+        <div id="heroUpVid" style="display:none">
+          <div class="up" onclick="document.getElementById('i_heroVid_f').click()">
+            <input type="file" id="i_heroVid_f" accept="video/*" onchange="uploadFile(this,'heroVid','heroVidPrev')">
+            <div class="up-ico">🎬</div>
+            <div class="up-txt">Upload MP4 video</div>
+            <div class="up-sub">Max 5MB recommended</div>
+          </div>
+          <div class="prev" id="heroVidPrev" style="max-width:340px"><video id="heroVidEl" muted loop autoplay></video><button class="x" onclick="rmImg('heroVid','heroVidPrev')">✕</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK -->
+    <div class="admin-panel" data-p="quick">
+      <div class="admin-card">
+        <h3>⚡ Quick Strip Items (3)</h3>
+        <div id="quickList"></div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="admin-panel" data-p="about">
+      <div class="admin-card">
+        <h3>🏫 About Section</h3>
+        <div class="af"><label>Eyebrow</label><input id="i_aboutEyebrow"></div>
+        <div class="af"><label>Section Title</label><input id="i_aboutTitle"></div>
+        <div class="af"><label>Section Subtitle</label><textarea id="i_aboutSub"></textarea></div>
+        <div class="af"><label>Story Heading</label><input id="i_storyH"></div>
+        <div class="af"><label>Story Paragraph</label><textarea id="i_storyP"></textarea></div>
+      </div>
+      <div class="admin-card">
+        <h3>📷 About Image / Video</h3>
+        <div class="up" onclick="document.getElementById('i_aboutMedia_f').click()">
+          <input type="file" id="i_aboutMedia_f" accept="image/*,video/*" onchange="uploadFile(this,'aboutMedia','aboutMediaPrev')">
+          <div class="up-ico">📷</div>
+          <div class="up-txt">Upload image or video</div>
+          <div class="up-sub">JPG, PNG, MP4, WebM</div>
+        </div>
+        <div class="prev" id="aboutMediaPrev" style="max-width:280px"><img id="aboutMediaImg"><video id="aboutMediaVid" style="display:none;width:100%;height:150px;object-fit:cover" muted loop autoplay></video><button class="x" onclick="rmImg('aboutMedia','aboutMediaPrev')">✕</button></div>
+        <div class="af" style="margin-top:12px"><label>Ya URL paste karo</label><input id="i_aboutMedia_url" placeholder="https://..."></div>
+      </div>
+      <div class="admin-card">
+        <h3>✨ Four Key Points</h3>
+        <div id="pointsList"></div>
+      </div>
+    </div>
+
+    <!-- ACADEMICS -->
+    <div class="admin-panel" data-p="academics">
+      <div class="admin-card">
+        <h3>📚 Academics Header</h3>
+        <div class="af"><label>Eyebrow</label><input id="i_acEyebrow"></div>
+        <div class="af"><label>Section Title</label><input id="i_acTitle"></div>
+        <div class="af"><label>Subtitle</label><textarea id="i_acSub"></textarea></div>
+      </div>
+      <div class="admin-card">
+        <h3>📖 Academic Cards</h3>
+        <div id="acList"></div>
+        <button class="abd gold" style="margin-top:12px" onclick="addCard('ac')">➕ Add Card</button>
+      </div>
+    </div>
+
+    <!-- FACILITIES -->
+    <div class="admin-panel" data-p="facilities">
+      <div class="admin-card">
+        <h3>🔬 Facilities Header</h3>
+        <div class="af"><label>Eyebrow</label><input id="i_faEyebrow"></div>
+        <div class="af"><label>Section Title</label><input id="i_faTitle"></div>
+        <div class="af"><label>Subtitle</label><textarea id="i_faSub"></textarea></div>
+      </div>
+      <div class="admin-card">
+        <h3>🏛️ Facility Cards</h3>
+        <div id="faList"></div>
+        <button class="abd gold" style="margin-top:12px" onclick="addCard('fa')">➕ Add Facility</button>
+      </div>
+    </div>
+
+    <!-- PRINCIPAL -->
+    <div class="admin-panel" data-p="principal">
+      <div class="admin-card">
+        <h3>👨‍🏫 Principal Details</h3>
+        <div class="admin-row">
+          <div class="af"><label>Full Name</label><input id="i_prName"></div>
+          <div class="af"><label>Role</label><input id="i_prRole"></div>
+        </div>
+        <div class="af"><label>Message Paragraph 1</label><textarea id="i_prMsg1"></textarea></div>
+        <div class="af"><label>Message Paragraph 2</label><textarea id="i_prMsg2"></textarea></div>
+      </div>
+      <div class="admin-card">
+        <h3>📷 Principal Photo</h3>
+        <div class="up" onclick="document.getElementById('i_prPhoto_f').click()">
+          <input type="file" id="i_prPhoto_f" accept="image/*" onchange="uploadFile(this,'prPhoto','prPhotoPrev')">
+          <div class="up-ico">👤</div>
+          <div class="up-txt">Upload principal photo</div>
+        </div>
+        <div class="prev" id="prPhotoPrev" style="max-width:220px"><img id="prPhotoImg"><button class="x" onclick="rmImg('prPhoto','prPhotoPrev')">✕</button></div>
+        <div class="af" style="margin-top:12px"><label>Ya URL paste karo</label><input id="i_prPhoto_url" placeholder="https://..."></div>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="admin-panel" data-p="gallery">
+      <div class="admin-card">
+        <h3>🖼️ Gallery Header</h3>
+        <div class="af"><label>Eyebrow</label><input id="i_gaEyebrow"></div>
+        <div class="af"><label>Title</label><input id="i_gaTitle"></div>
+        <div class="af"><label>Subtitle</label><input id="i_gaSub"></div>
+      </div>
+      <div class="admin-card">
+        <h3>🖼️ Gallery Items</h3>
+        <div id="galleryList"></div>
+        <button class="abd gold" style="margin-top:12px" onclick="addGallery()">➕ Add Image/Video</button>
+      </div>
+    </div>
+
+    <!-- VIDEOS -->
+    <div class="admin-panel" data-p="videos">
+      <div class="admin-card">
+        <h3>🎬 Video Section Header</h3>
+        <div class="af"><label>Section Title</label><input id="i_vidTitle"></div>
+        <div class="af"><label>Subtitle</label><input id="i_vidSub"></div>
+      </div>
+      <div class="admin-card">
+        <h3>🎬 Videos (YouTube / Vimeo / MP4)</h3>
+        <div id="videoList"></div>
+        <button class="abd gold" style="margin-top:12px" onclick="addVideo()">➕ Add Video</button>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="admin-panel" data-p="contact">
+      <div class="admin-card">
+        <h3>📞 Contact Section</h3>
+        <div class="af"><label>Heading</label><input id="i_cTitle"></div>
+        <div class="af"><label>Description</label><textarea id="i_cDesc"></textarea></div>
+      </div>
+      <div class="admin-card">
+        <h3>🎓 Admission CTA</h3>
+        <div class="af"><label>Title</label><input id="i_adTitle"></div>
+        <div class="af"><label>Description</label><textarea id="i_adDesc"></textarea></div>
+        <div class="admin-row">
+          <div class="af"><label>Button Text</label><input id="i_adBtn"></div>
+          <div class="af"><label>Button Link</label><input id="i_adBtnLink"></div>
+        </div>
+      </div>
+      <div class="admin-card">
+        <h3>📝 Footer</h3>
+        <div class="af"><label>Copyright Text</label><input id="i_footer"></div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="admin-panel" data-p="security">
+      <div class="admin-card">
+        <h3>🔐 Change Password</h3>
+        <div class="af"><label>Current Password</label><input type="password" id="i_curPass" placeholder="Enter current password"></div>
+        <div class="af"><label>New Username</label><input id="i_newUser" placeholder="New username"></div>
+        <div class="af"><label>New Password</label><input type="password" id="i_newPass" placeholder="Min 6 characters"></div>
+        <div class="af"><label>Confirm New Password</label><input type="password" id="i_cfmPass" placeholder="Re-enter new password"></div>
+        <button class="abd gold" onclick="changeCreds()" style="padding:12px 22px;font-size:14px">🔐 Update Credentials</button>
+        <div class="af" style="margin-top:16px"><small>⚠️ Password min 6 characters, at least 1 number</small></div>
+      </div>
+      <div class="admin-card">
+        <h3>🚨 Reset Everything</h3>
+        <p style="color:#68758a;font-size:13px;margin-bottom:14px">Reset website content, credentials, everything back to default.</p>
+        <button class="abd red" onclick="resetAll()" style="padding:12px 22px;font-size:14px">🔄 Factory Reset</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= WEBSITE ================= -->
+<div class="topbar"><div class="container">
+  <a href="#">📞 <span id="vPhone"></span></a>
+  <a href="#">✉️ <span id="vEmail"></span></a>
+  <span>📍 <span id="vAddress"></span></span>
+</div></div>
+
+<header class="header"><div class="container">
+  <a class="brand" href="#">
+    <div class="brand-logo" id="vLogo">BBS</div>
+    <div><div class="brand-title" id="vSchoolName"></div><div class="brand-sub" id="vTagline"></div></div>
+  </a>
+  <nav class="nav">
+    <a href="#about">About</a><a href="#academics">Academics</a><a href="#facilities">Facilities</a>
+    <a href="#principal">Principal</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a>
+    <a class="nav-cta" href="#" onclick="openAdmin(event)">🔐 Admin</a>
+  </nav>
+</div></header>
+
+<section class="hero" id="vHero">
+  <div id="vHeroVideoBox"></div>
+  <div class="container">
+    <div class="kicker" id="vKicker"></div>
+    <h1 id="vHeroH1"></h1>
+    <p id="vHeroDesc"></p>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="#" id="vHeroBtn1"></a>
+      <a class="btn btn-outline" href="#" id="vHeroBtn2"></a>
+    </div>
+  </div>
+</section>
+
+<div class="quick"><div class="container"><div class="quick-grid" id="vQuick"></div></div></div>
+
+<section id="about"><div class="container">
+  <div class="sec-head"><div class="eyebrow" id="vAbEyebrow"></div><h2 id="vAbTitle"></h2><p id="vAbSub"></p></div>
+  <div class="about-grid">
+    <div class="about-media placeholder" id="vAboutMedia">🏫</div>
+    <div class="about-copy">
+      <h3 id="vStoryH"></h3><p id="vStoryP"></p>
+      <div class="points" id="vPoints"></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="academics" style="background:#fff"><div class="container">
+  <div class="sec-head"><div class="eyebrow" id="vAcEyebrow"></div><h2 id="vAcTitle"></h2><p id="vAcSub"></p></div>
+  <div class="cards" id="vAcCards"></div>
+</div></section>
+
+<section id="facilities"><div class="container">
+  <div class="sec-head"><div class="eyebrow" id="vFaEyebrow"></div><h2 id="vFaTitle"></h2><p id="vFaSub"></p></div>
+  <div class="cards" id="vFaCards"></div>
+</div></section>
+
+<section id="principal" class="principal"><div class="container">
+  <div class="principal-grid">
+    <div class="principal-media placeholder" id="vPrMedia">👨‍🏫</div>
+    <div class="principal-copy">
+      <h2>Meet Our Principal</h2>
+      <div class="principal-role" id="vPrRole"></div>
+      <p id="vPrMsg1"></p><p id="vPrMsg2"></p>
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid #dbe2ee">
+        <b style="font-family:Georgia,serif;font-size:18px;color:var(--navy)" id="vPrName"></b>
+        <div style="font-size:12px;color:var(--muted)">Principal, BBS International School</div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="container">
+  <div class="sec-head"><div class="eyebrow" id="vGaEyebrow"></div><h2 id="vGaTitle"></h2><p id="vGaSub"></p></div>
+  <div class="gallery" id="vGallery"></div>
+</div></section>
+
+<section id="videos"><div class="container">
+  <div class="sec-head"><h2 id="vVidTitle"></h2><p id="vVidSub"></p></div>
+  <div class="gallery" id="vVideos"></div>
+</div></section>
+
+<section><div class="container">
+  <div class="admission">
+    <div><h2 id="vAdTitle"></h2><p id="vAdDesc"></p></div>
+    <a class="btn btn-primary" href="#" id="vAdBtn"></a>
+  </div>
+</div></section>
+
+<section id="contact" class="contact"><div class="container contact-grid">
+  <div><h2 id="vCTitle"></h2><p id="vCDesc"></p></div>
+  <div><h3>Contact</h3><ul>
+    <li>📞 <a href="#" id="vCPhone"></a></li>
+    <li>✉️ <a href="#" id="vCEmail"></a></li>
+  </ul></div>
+  <div><h3>Address</h3><p>📍 <span id="vCAddress"></span></p></div>
+</div></section>
+
+<div class="footer" id="vFooter"></div>
+
+<a href="#" class="float-admin hidden" onclick="openAdmin(event)">⚙️ Admin Panel</a>
+
+<script>
+/* =========================================================
+   BBS ADMIN PANEL
+   ========================================================= */
+var STORAGE_KEY = 'bbs_site_data_v1';
+var AUTH_KEY = 'bbs_admin_auth';
+var CREDS_KEY = 'bbs_admin_creds';
+
+var DEFAULT_USER = 'admin';
+var DEFAULT_PASS = 'bbs@2024';
+
+/* Get credentials (allows change) */
+function getCreds(){
+  try{
+    var c = localStorage.getItem(CREDS_KEY);
+    if(c) return JSON.parse(c);
+  }catch(e){}
+  return { user: DEFAULT_USER, pass: DEFAULT_PASS };
+}
+function setCreds(user, pass){
+  localStorage.setItem(CREDS_KEY, JSON.stringify({user:user, pass:pass}));
+}
+
+/* DEFAULT DATA */
+var DEFAULT = {
+  schoolName:'BBS International School',
+  tagline:'Illuminating Minds, Shaping Futures',
+  phone:'9236008658',
+  email:'bbs international@gmail.com',
+  address:'Near Dahiyawan Mela Ground, Prayagraj - 212503',
+  logo:'', heroBg:'', heroVid:'',
+
+  kicker:'Welcome to BBS International School',
+  line1:'Growing', highlight:'Bright Minds', line2:'for a Better Future.',
+  heroDesc:'A welcoming learning environment where children build strong foundations through knowledge, creativity, character and confidence.',
+  btn1:'Explore School →', btn1Link:'#about',
+  btn2:'Call School', btn2Link:'tel:9236008658',
+
+  quick:[
+    {icon:'🎓',title:'Classes KG to 8',desc:'Learning across foundational years.'},
+    {icon:'📍',title:'Prayagraj Campus',desc:'Near Dahiyawan Mela Ground.'},
+    {icon:'📞',title:'Speak With Us',desc:'9236008658 · bbs international@gmail.com'}
+  ],
+
+  aboutEyebrow:'About the School',
+  aboutTitle:'A Place to Learn, Create & Grow',
+  aboutSub:'BBS International School is a child-friendly campus with focus on confident learners.',
+  storyH:'Strong foundations. Meaningful learning.',
+  storyP:'Our school environment is designed to support curiosity, discipline, creativity and everyday learning.',
+  aboutMedia:'',
+  points:[
+    {title:'Child-Centred Learning',desc:'Encouraging curiosity and confidence.'},
+    {title:'Creative Activities',desc:'Spaces for imagination and expression.'},
+    {title:'Practical Exposure',desc:'Library, science and computer.'},
+    {title:'Positive Environment',desc:'Welcoming campus.'}
+  ],
+
+  acEyebrow:'Academics', acTitle:'Learning With Purpose',
+  acSub:'Academic information can be expanded by the school later.',
+  acCards:[
+    {icon:'📖',title:'Foundational Learning',desc:'Reading, writing, numeracy skills.'},
+    {icon:'🔬',title:'Science Learning',desc:'Observation and experiments.'},
+    {icon:'💻',title:'Digital Skills',desc:'Computer and digital skills.'},
+    {icon:'🎨',title:'Creativity',desc:'Explore ideas and expression.'}
+  ],
+
+  faEyebrow:'Campus Facilities', faTitle:'Spaces That Support Learning',
+  faSub:'Facilities shared for the school website.',
+  faCards:[
+    {icon:'📚',title:'Well-Stocked Library',desc:'Encourages reading and learning.'},
+    {icon:'🧪',title:'Science Laboratory',desc:'Practical learning for science.'},
+    {icon:'🖥️',title:'Computer Lab',desc:'Essential computer skills.'},
+    {icon:'🎭',title:'Activity Rooms',desc:'Spaces for activities.'}
+  ],
+
+  prTitle:'Meet Our Principal',
+  prName:'Mr Prateek Singh', prRole:'Principal',
+  prMsg1:'The Principal section gives the school a clear, professional introduction for parents and visitors.',
+  prMsg2:'Additional staff photographs can be added later if the school wants them.',
+  prPhoto:'',
+
+  gaEyebrow:'Campus Gallery', gaTitle:'A Glimpse of Our School',
+  gaSub:'Real school photographs',
+  gallery:[],
+
+  vidTitle:'Our Videos', vidSub:'Watch school videos',
+  videos:[],
+
+  adTitle:'Admissions Open for 2025-26',
+  adDesc:'Join BBS International School and give your child the foundation they deserve.',
+  adBtn:'Apply Now →', adBtnLink:'tel:9236008658',
+
+  cTitle:'Get in Touch',
+  cDesc:'Reach out to us for enquiries about admissions and academics.',
+  footer:'© 2025 BBS International School · All Rights Reserved'
+};
+
+var data = {};
+var isAdmin = false;
+var attempts = 0;
+var autoLogoutTimer;
+
+/* LOAD */
+function loadData(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    data = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT));
+    for(var k in DEFAULT){
+      if(data[k] === undefined) data[k] = JSON.parse(JSON.stringify(DEFAULT[k]));
+    }
+  }catch(e){ data = JSON.parse(JSON.stringify(DEFAULT)); }
+}
+
+/* SAVE */
+function saveData(silent){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if(!silent) toast('✅ Saved!');
+    renderSite();
+  }catch(e){
+    toast('❌ Storage full — small files use karo', 'err');
+  }
+}
+
+/* HELPERS */
+function $(id){ return document.getElementById(id); }
+function setT(id,v){ var e=$(id); if(e && v!=null) e.textContent = v; }
+function setH(id,v){ var e=$(id); if(e && v!=null) e.innerHTML = v; }
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+
+function toast(msg, type){
+  var old = document.querySelector('.toast');
+  if(old) old.remove();
+  var t = document.createElement('div');
+  t.className = 'toast' + (type==='err'?' err':'');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 2800);
+}
+
+function isVideo(src){
+  if(!src) return false;
+  if(src.indexOf('data:video')===0) return true;
+  return /\.(mp4|webm|ogg|mov)(\?|$)/i.test(src);
+}
+
+function getYouTubeId(url){
+  var m = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+  return m ? m[1] : '';
+}
+
+/* RENDER SITE */
+function renderSite(){
+  setT('vPhone',data.phone); setT('vEmail',data.email); setT('vAddress',data.address);
+  setT('vSchoolName',data.schoolName); setT('vTagline',data.tagline);
+
+  var vLogo = $('vLogo');
+  if(vLogo){
+    if(data.logo) vLogo.innerHTML = '<img src="'+data.logo+'" alt="logo">';
+    else vLogo.textContent = 'BBS';
+  }
+
+  setT('vKicker',data.kicker);
+  setH('vHeroH1', esc(data.line1)+' <span>'+esc(data.highlight)+'</span><br>'+esc(data.line2));
+  setT('vHeroDesc',data.heroDesc);
+  setT('vHeroBtn1',data.btn1); setT('vHeroBtn2',data.btn2);
+  var b1=$('vHeroBtn1'); if(b1) b1.href = data.btn1Link||'#';
+  var b2=$('vHeroBtn2'); if(b2) b2.href = data.btn2Link||'#';
+
+  var vHero = $('vHero'), vHeroVidBox = $('vHeroVideoBox');
+  if(vHero && vHeroVidBox){
+    vHeroVidBox.innerHTML = '';
+    vHero.classList.remove('has-img','has-video');
+    vHero.style.backgroundImage = 'linear-gradient(90deg,rgba(4,18,49,.92),rgba(4,18,49,.6)),radial-gradient(circle at 70% 50%,#1a3a7a,#071b46)';
+    if(data.heroVid){
+      vHeroVidBox.innerHTML = '<video autoplay muted loop playsinline><source src="'+data.heroVid+'"></video>';
+      vHero.classList.add('has-video');
+    } else if(data.heroBg){
+      vHero.style.backgroundImage = 'linear-gradient(90deg,rgba(4,18,49,.85),rgba(4,18,49,.55)),url('+data.heroBg+')';
+      vHero.classList.add('has-img');
+    }
+  }
+
+  var vQ = $('vQuick');
+  if(vQ) vQ.innerHTML = (data.quick||[]).map(function(q){
+    return '<div class="quick-item"><div class="quick-icon">'+esc(q.icon)+'</div><div><b>'+esc(q.title)+'</b><span>'+esc(q.desc)+'</span></div></div>';
+  }).join('');
+
+  setT('vAbEyebrow',data.aboutEyebrow); setT('vAbTitle',data.aboutTitle); setT('vAbSub',data.aboutSub);
+  setT('vStoryH',data.storyH); setT('vStoryP',data.storyP);
+
+  var vAM = $('vAboutMedia');
+  if(vAM){
+    if(data.aboutMedia){
+      if(isVideo(data.aboutMedia)){
+        vAM.innerHTML = '<video autoplay muted loop playsinline><source src="'+data.aboutMedia+'"></video>';
+        vAM.classList.remove('placeholder');
+      } else {
+        vAM.innerHTML = '<img src="'+data.aboutMedia+'" alt="">';
+        vAM.classList.remove('placeholder');
+      }
+    } else { vAM.innerHTML = '🏫'; vAM.classList.add('placeholder'); }
+  }
+
+  var vP = $('vPoints');
+  if(vP) vP.innerHTML = (data.points||[]).map(function(p){
+    return '<div class="point"><b>'+esc(p.title)+'</b><span>'+esc(p.desc)+'</span></div>';
+  }).join('');
+
+  setT('vAcEyebrow',data.acEyebrow); setT('vAcTitle',data.acTitle); setT('vAcSub',data.acSub);
+  var vAC = $('vAcCards');
+  if(vAC) vAC.innerHTML = (data.acCards||[]).map(function(c){
+    var m = c.media ? (isVideo(c.media)?'<video autoplay muted loop><source src="'+c.media+'"></video>':'<img src="'+c.media+'">') : '';
+    return '<div class="card">'+m+'<div class="card-ico">'+esc(c.icon)+'</div><h3>'+esc(c.title)+'</h3><p>'+esc(c.desc)+'</p></div>';
+  }).join('');
+
+  setT('vFaEyebrow',data.faEyebrow); setT('vFaTitle',data.faTitle); setT('vFaSub',data.faSub);
+  var vFC = $('vFaCards');
+  if(vFC) vFC.innerHTML = (data.faCards||[]).map(function(c){
+    var m = c.media ? (isVideo(c.media)?'<video autoplay muted loop><source src="'+c.media+'"></video>':'<img src="'+c.media+'">') : '';
+    return '<div class="card">'+m+'<div class="card-ico">'+esc(c.icon)+'</div><h3>'+esc(c.title)+'</h3><p>'+esc(c.desc)+'</p></div>';
+  }).join('');
+
+  setT('vPrName',data.prName);
+  setH('vPrRole', esc(data.prName).toUpperCase()+' · '+esc(data.prRole).toUpperCase());
+  setT('vPrMsg1',data.prMsg1); setT('vPrMsg2',data.prMsg2);
+
+  var vPM = $('vPrMedia');
+  if(vPM){
+    if(data.prPhoto){
+      vPM.innerHTML = '<img src="'+data.prPhoto+'" alt="">';
+      vPM.classList.remove('placeholder');
+    } else { vPM.innerHTML = '👨‍🏫'; vPM.classList.add('placeholder'); }
+  }
+
+  setT('vGaEyebrow',data.gaEyebrow); setT('vGaTitle',data.gaTitle); setT('vGaSub',data.gaSub);
+  var vG = $('vGallery');
+  if(vG) vG.innerHTML = (data.gallery||[]).map(function(g){
+    var m = g.src ? (isVideo(g.src)?'<video autoplay muted loop><source src="'+g.src+'"></video>':'<img src="'+g.src+'">') : '🖼️';
+    return '<div class="gal-item"><div class="gal-media'+(g.src?'':' placeholder')+'">'+(g.src?m:'🖼️')+'</div><div class="gal-cap">'+esc(g.caption||'')+'</div></div>';
+  }).join('');
+
+  setT('vVidTitle',data.vidTitle); setT('vVidSub',data.vidSub);
+  var vV = $('vVideos');
+  if(vV) vV.innerHTML = (data.videos||[]).map(function(v){
+    var embed = '';
+    if(v.url){
+      if(/youtube\.com|youtu\.be/.test(v.url)){
+        embed = '<iframe src="https://www.youtube.com/embed/'+getYouTubeId(v.url)+'" allowfullscreen></iframe>';
+      } else if(/vimeo\.com/.test(v.url)){
+        var vid = (v.url.match(/vimeo\.com\/(\d+)/)||[])[1]||'';
+        embed = '<iframe src="https://player.vimeo.com/video/'+vid+'"></iframe>';
+      } else {
+        embed = '<video autoplay muted loop><source src="'+v.url+'"></video>';
+      }
+    } else if(v.src){
+      embed = '<video controls><source src="'+v.src+'"></video>';
+    } else { embed = '🎬'; }
+    return '<div class="gal-item"><div class="gal-media">'+embed+'</div><div class="gal-cap">'+esc(v.title||'')+'</div></div>';
+  }).join('');
+
+  setT('vAdTitle',data.adTitle); setT('vAdDesc',data.adDesc);
+  var vAdBtn = $('vAdBtn'); if(vAdBtn){ vAdBtn.textContent = data.adBtn||'Apply Now →'; vAdBtn.href = data.adBtnLink||'#'; }
+
+  setT('vCTitle',data.cTitle); setT('vCDesc',data.cDesc);
+  setT('vCPhone',data.phone); setT('vCEmail',data.email); setT('vCAddress',data.address);
+  var cP=$('vCPhone'); if(cP) cP.href='tel:'+data.phone;
+  var cE=$('vCEmail'); if(cE) cE.href='mailto:'+data.email;
+
+  setT('vFooter',data.footer);
+}
+
+/* BIND ADMIN FORM */
+function bindForm(){
+  var map = {
+    schoolName:'i_schoolName', tagline:'i_tagline', phone:'i_phone', email:'i_email', address:'i_address',
+    kicker:'i_kicker', line1:'i_line1', highlight:'i_highlight', line2:'i_line2',
+    heroDesc:'i_heroDesc', btn1:'i_btn1', btn1Link:'i_btn1Link', btn2:'i_btn2', btn2Link:'i_btn2Link',
+    aboutEyebrow:'i_aboutEyebrow', aboutTitle:'i_aboutTitle', aboutSub:'i_aboutSub',
+    storyH:'i_storyH', storyP:'i_storyP',
+    acEyebrow:'i_acEyebrow', acTitle:'i_acTitle', acSub:'i_acSub',
+    faEyebrow:'i_faEyebrow', faTitle:'i_faTitle', faSub:'i_faSub',
+    prTitle:'i_prTitle', prName:'i_prName', prRole:'i_prRole', prMsg1:'i_prMsg1', prMsg2:'i_prMsg2',
+    gaEyebrow:'i_gaEyebrow', gaTitle:'i_gaTitle', gaSub:'i_gaSub',
+    vidTitle:'i_vidTitle', vidSub:'i_vidSub',
+    cTitle:'i_cTitle', cDesc:'i_cDesc',
+    adTitle:'i_adTitle', adDesc:'i_adDesc', adBtn:'i_adBtn', adBtnLink:'i_adBtnLink',
+    footer:'i_footer'
+  };
+  Object.keys(map).forEach(function(k){
+    var el = $(map[k]);
+    if(!el) return;
+    el.value = data[k] || '';
+    el.addEventListener('input', function(){ data[k] = el.value; });
+  });
+
+  ['i_logo_url','i_aboutMedia_url','i_prPhoto_url'].forEach(function(id){
+    var el = $(id);
+    if(!el) return;
+    el.addEventListener('change', function(){
+      var key = id.replace('i_','').replace('_url','');
+      if(el.value){ data[key] = el.value; saveData(true); renderPreviews(); }
+    });
+  });
+
+  renderPreviews();
+}
+
+function renderPreviews(){
+  if(data.logo) showPrev('logoPrev','logoImg',data.logo);
+  if(data.heroBg) showPrev('heroBgPrev','heroBgImg',data.heroBg);
+  if(data.heroVid) showVidPrev('heroVidPrev','heroVidEl',data.heroVid);
+  if(data.aboutMedia) showPrev('aboutMediaPrev','aboutMediaImg',data.aboutMedia);
+  if(data.prPhoto) showPrev('prPhotoPrev','prPhotoImg',data.prPhoto);
+}
+
+function showPrev(prevId, imgId, src){
+  var p = $(prevId), img = $(imgId);
+  if(p) p.classList.add('show');
+  if(img && src && !isVideo(src)) img.src = src;
+  if(img && isVideo(src)) img.style.display = 'none';
+}
+function showVidPrev(prevId, vidId, src){
+  var p = $(prevId), v = $(vidId);
+  if(p) p.classList.add('show');
+  if(v && src){ v.src = src; v.play(); }
+}
+
+/* UPLOAD */
+function uploadFile(input, key, prevId){
+  var f = input.files[0]; if(!f) return;
+  if(f.size > 4*1024*1024){ toast('⚠️ File > 4MB — browser slow ho sakta hai', 'err'); }
+  var r = new FileReader();
+  r.onload = function(e){
+    data[key] = e.target.result;
+    var p = $(prevId); if(p) p.classList.add('show');
+    var imgMap = {logo:'logoImg',heroBg:'heroBgImg',aboutMedia:'aboutMediaImg',prPhoto:'prPhotoImg'};
+    var vidMap = {heroVid:'heroVidEl'};
+    if(imgMap[key]){
+      var im = $(imgMap[key]);
+      if(im && isVideo(e.target.result)) im.style.display='none';
+      else if(im) { im.src = e.target.result; im.style.display='block'; }
+    }
+    if(vidMap[key]){
+      var v = $(vidMap[key]);
+      if(v){ v.src = e.target.result; v.play(); }
+    }
+    if(key==='aboutMedia' && isVideo(e.target.result)){
+      var v2 = $('aboutMediaVid');
+      if(v2){ v2.src = e.target.result; v2.style.display='block'; v2.play(); }
+      var i2 = $('aboutMediaImg'); if(i2) i2.style.display='none';
+    }
+    saveData(true); renderSite();
+  };
+  r.readAsDataURL(f);
+}
+
+function rmImg(key, prevId){
+  data[key] = '';
+  var p = $(prevId); if(p) p.classList.remove('show');
+  saveData(true); renderSite();
+}
+
+/* TABS */
+document.querySelectorAll('.admin-tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('.admin-tab').forEach(function(x){ x.classList.remove('active'); });
+    document.querySelectorAll('.admin-panel').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    var p = document.querySelector('.admin-panel[data-p="'+t.dataset.t+'"]');
+    if(p) p.classList.add('active');
+  });
+});
+
+function switchUp(section, type, btn){
+  var wrap = btn.parentNode;
+  wrap.querySelectorAll('.up-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  if(section==='hero'){
+    $('heroUpImg').style.display = type==='img'?'block':'none';
+    $('heroUpVid').style.display = type==='video'?'block':'none';
+  }
+}
+
+/* EDITORS */
+function renderQuickEditor(){
+  var box = $('quickList'); if(!box) return;
+  box.innerHTML = (data.quick||[]).map(function(q,i){
+    return '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:10px;display:grid;grid-template-columns:60px 1fr 2fr 40px;gap:10px;align-items:center">'+
+      '<input value="'+esc(q.icon)+'" oninput="upd(\'quick\','+i+',\'icon\',this.value)" placeholder="Icon" style="padding:8px;border:1px solid #e2e8f0;border-radius:7px;text-align:center;font-size:18px">'+
+      '<input value="'+esc(q.title)+'" oninput="upd(\'quick\','+i+',\'title\',this.value)" placeholder="Title" style="padding:8px;border:1px solid #e2e8f0;border-radius:7px">'+
+      '<input value="'+esc(q.desc)+'" oninput="upd(\'quick\','+i+',\'desc\',this.value)" placeholder="Desc" style="padding:8px;border:1px solid #e2e8f0;border-radius:7px">'+
+      '<button onclick="delItem(\'quick\','+i+')" style="padding:8px;background:#fef2f2;color:#dc2626;border:0;border-radius:7px">🗑️</button>'+
+    '</div>';
+  }).join('') || '<p style="color:#94a3b8;text-align:center;padding:20px">No items</p>';
+}
+
+function renderPointsEditor(){
+  var box = $('pointsList'); if(!box) return;
+  box.innerHTML = (data.points||[]).map(function(p,i){
+    return '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:10px;display:grid;grid-template-columns:1fr 2fr 40px;gap:10px">'+
+      '<input value="'+esc(p.title)+'" oninput="upd(\'points\','+i+',\'title\',this.value)" placeholder="Title" style="padding:8px;border:1px solid #e2e8f0;border-radius:7px">'+
+      '<input value="'+esc(p.desc)+'" oninput="upd(\'points\','+i+',\'desc\',this.value)" placeholder="Desc" style="padding:8px;border:1px solid #e2e8f0;border-radius:7px">'+
+      '<button onclick="delItem(\'points\','+i+')" style="padding:8px;background:#fef2f2;color:#dc2626;border:0;border-radius:7px">🗑️</button>'+
+    '</div>';
+  }).join('');
+}
+
+function renderCardsEditor(key, boxId){
+  var box = $(boxId); if(!box) return;
+  box.innerHTML = (data[key]||[]).map(function(c,i){
+    return '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:10px">'+
+      '<div style="display:grid;grid-template-columns:60px 1fr 2fr 40px;gap:10px;margin-bottom:8px">'+
+      '<input value="'+esc(c.icon)+'" oninput="upd(\''+key+'\','+i+',\'icon\',this.value)" placeholder="Icon" style="padding:8px;border:1px solid #e2e8f0;border-radius:7px;text-align:center;font-size:18px">'+
+      '<input value="'+esc(c.title)+'" oninput="upd(\''+key+'\','+i+',\'title\',this.value)" placeholder="Title" style="padding:8px;border:1px solid #e2e8f0;border-radius:7px">'+
+      '<input value="'+esc(c.desc)+'" oninput="upd(\''+key+'\','+i+',\'desc\',this.value)" placeholder="Desc" style="padding:8px;border:1px solid #e2e8f0;border-radius:7px">'+
+      '<button onclick="delItem(\''+key+'\','+i+')" style="padding:8px;background:#fef2f2;color:#dc2626;border:0;border-radius:7px">🗑️</button>'+
+      '</div>'+
+      '<div style="display:flex;gap:10px;align-items:center">'+
+      '<label style="padding:6px 12px;background:var(--navy);color:#fff;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">📷 Upload<input type="file" accept="image/*,video/*" style="display:none" onchange="updMedia(event,\''+key+'\','+i+')"></label>'+
+      '<input value="'+(c.media && !c.media.startsWith('data:') ? esc(c.media) : '')+'" placeholder="Ya URL" onchange="upd(\''+key+'\','+i+',\'media\',this.value)" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:7px;font-size:12px">'+
+      (c.media ? (isVideo(c.media)?'<span style="font-size:20px">🎬</span>':'<img src="'+c.media+'" style="width:40px;height:40px;object-fit:cover;border-radius:6px">') : '')+
+      '</div></div>';
+  }).join('');
+}
+
+function updMedia(ev, key, i){
+  var f = ev.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(e){
+    data[key][i].media = e.target.result;
+    saveData(true);
+    renderCardsEditor(key, key==='acCards'?'acList':'faList');
+  };
+  r.readAsDataURL(f);
+}
+
+function upd(key, i, field, val){
+  data[key][i][field] = val;
+  saveData(true);
+}
+
+function delItem(key, i){
+  if(!confirm('Delete?')) return;
+  data[key].splice(i,1);
+  saveData(true);
+  renderAllEditors();
+}
+
+function addCard(type){
+  var key = type==='ac' ? 'acCards' : 'faCards';
+  data[key].push({icon:'⭐',title:'New Card',desc:'Description',media:''});
+  saveData(true); renderAllEditors();
+}
+
+function renderGalleryEditor(){
+  var box = $('galleryList'); if(!box) return;
+  box.innerHTML = (data.gallery||[]).map(function(g,i){
+    var thumb = g.src ? (isVideo(g.src)?'<video src="'+g.src+'" muted></video>':'<img src="'+g.src+'">') : '🖼️';
+    return '<div class="rep">'+
+      '<div class="r-thumb">'+thumb+'</div>'+
+      '<div class="r-body">'+
+      '<input value="'+esc(g.caption||'')+'" oninput="upd(\'gallery\','+i+',\'caption\',this.value)" placeholder="Caption" style="width:100%;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px">'+
+      '<input value="'+(g.src && !g.src.startsWith('data:') ? esc(g.src) : '')+'" onchange="upd(\'gallery\','+i+',\'src\',this.value)" placeholder="Ya URL paste karo" style="width:100%;margin-top:6px;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px">'+
+      '</div>'+
+      '<div class="r-act">'+
+      '<label class="ib" style="cursor:pointer;background:var(--navy);color:#fff">📤<input type="file" accept="image/*,video/*" style="display:none" onchange="updGalleryFile(event,'+i+')"></label>'+
+      '<button class="ib del" onclick="delItem(\'gallery\','+i+')">🗑️</button>'+
+      '</div></div>';
+  }).join('') || '<p style="color:#94a3b8;text-align:center;padding:20px">No items yet</p>';
+}
+
+function addGallery(){ data.gallery.push({caption:'New Photo',src:''}); saveData(true); renderGalleryEditor(); }
+function updGalleryFile(ev,i){
+  var f = ev.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(e){ data.gallery[i].src = e.target.result; saveData(true); renderGalleryEditor(); };
+  r.readAsDataURL(f);
+}
+
+function renderVideoEditor(){
+  var box = $('videoList'); if(!box) return;
+  box.innerHTML = (data.videos||[]).map(function(v,i){
+    return '<div class="rep">'+
+      '<div class="r-thumb">'+(v.url?'🔗':'🎬')+'</div>'+
+      '<div class="r-body">'+
+      '<input value="'+esc(v.title||'')+'" oninput="upd(\'videos\','+i+',\'title\',this.value)" placeholder="Title" style="width:100%;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px">'+
+      '<input value="'+esc(v.url||'')+'" onchange="upd(\'videos\','+i+',\'url\',this.value)" placeholder="YouTube / Vimeo URL" style="width:100%;margin-top:6px;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px">'+
+      '</div>'+
+      '<div class="r-act">'+
+      '<label class="ib" style="cursor:pointer;background:var(--navy);color:#fff">📤 MP4<input type="file" accept="video/*" style="display:none" onchange="updVideoFile(event,'+i+')"></label>'+
+      '<button class="ib del" onclick="delItem(\'videos\','+i+')">🗑️</button>'+
+      '</div></div>';
+  }).join('') || '<p style="color:#94a3b8;text-align:center;padding:20px">No videos yet</p>';
+}
+
+function addVideo(){ data.videos.push({title:'New Video',url:'',src:''}); saveData(true); renderVideoEditor(); }
+function updVideoFile(ev,i){
+  var f = ev.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(e){
+    data.videos[i].src = e.target.result;
+    data.videos[i].url = '';
+    saveData(true); renderVideoEditor();
+  };
+  r.readAsDataURL(f);
+}
+
+function renderAllEditors(){
+  renderQuickEditor();
+  renderPointsEditor();
+  renderCardsEditor('acCards','acList');
+  renderCardsEditor('faCards','faList');
+  renderGalleryEditor();
+  renderVideoEditor();
+}
+
+/* LOGIN */
+function doLogin(){
+  var u = $('uIn').value.trim(), p = $('pIn').value;
+  var creds = getCreds();
+  if(u === creds.user && p === creds.pass){
+    localStorage.setItem(AUTH_KEY,'1');
+    isAdmin = true;
+    attempts = 0;
+    $('login').style.display = 'none';
+    $('admin').classList.add('active');
+    document.querySelector('.float-admin').classList.remove('hidden');
+    toast('✅ Welcome Admin!');
+    renderAllEditors();
+    startAutoLogout();
+  } else {
+    attempts++;
+    $('err').style.display = 'block';
+    $('err').textContent = '❌ Invalid credentials! ('+attempts+'/3)';
+    if(attempts >= 3){
+      $('err').textContent = '🚫 Too many attempts! 30s wait.';
+      $('uIn').disabled = true; $('pIn').disabled = true; $('loginBtn').disabled = true;
+      setTimeout(function(){
+        $('uIn').disabled = false; $('pIn').disabled = false; $('loginBtn').disabled = false;
+        attempts = 0;
+        $('err').style.display = 'none';
+      }, 30000);
+    }
+  }
+}
+$('pIn').addEventListener('keypress',function(e){ if(e.key==='Enter') doLogin(); });
+$('uIn').addEventListener('keypress',function(e){ if(e.key==='Enter') $('pIn').focus(); });
+
+function logout(){
+  localStorage.removeItem(AUTH_KEY);
+  isAdmin = false;
+  $('admin').classList.remove('active');
+  $('login').style.display = 'flex';
+  $('uIn').value=''; $('pIn').value=''; $('err').style.display='none';
+  document.querySelector('.float-admin').classList.add('hidden');
+  stopAutoLogout();
+  toast('👋 Logged out');
+}
+
+/* AUTO-LOGOUT 30 MIN */
+function startAutoLogout(){
+  stopAutoLogout();
+  autoLogoutTimer = setTimeout(function(){
+    if(isAdmin){ logout(); toast('⏰ Auto-logout after 30 min', 'err'); }
+  }, 30*60*1000);
+}
+function stopAutoLogout(){ if(autoLogoutTimer) clearTimeout(autoLogoutTimer); }
+
+/* PASSWORD CHANGE */
+function changeCreds(){
+  var cur = $('i_curPass').value;
+  var newU = $('i_newUser').value.trim();
+  var newP = $('i_newPass').value;
+  var cfmP = $('i_cfmPass').value;
+  var creds = getCreds();
+
+  if(cur !== creds.pass){ toast('❌ Current password galat hai', 'err'); return; }
+  if(!newU && !newP){ toast('❌ Kuch toh change karo!', 'err'); return; }
+  if(newP && newP.length < 6){ toast('❌ Password min 6 characters', 'err'); return; }
+  if(newP && !/\d/.test(newP)){ toast('❌ Password mein 1 number hona chahiye', 'err'); return; }
+  if(newP !== cfmP){ toast('❌ Passwords match nahi kar rahe', 'err'); return; }
+
+  setCreds(newU || creds.user, newP || creds.pass);
+  $('i_curPass').value=''; $('i_newUser').value=''; $('i_newPass').value=''; $('i_cfmPass').value='';
+  toast('✅ Credentials updated! Next login pe use karo');
+}
+
+/* RESET ALL */
+function resetAll(){
+  if(!confirm('⚠️ Sab kuch reset ho jayega (content + credentials). Continue?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(CREDS_KEY);
+  localStorage.removeItem(AUTH_KEY);
+  location.reload();
+}
+
+/* OPEN ADMIN */
+function openAdmin(e){
+  if(e) e.preventDefault();
+  if(isAdmin){
+    $('admin').classList.add('active');
+    renderAllEditors();
+  } else {
+    $('login').style.display = 'flex';
+  }
+}
+
+function preview(){
+  $('admin').classList.remove('active');
+  toast('👁️ Preview mode');
+}
+
+function saveAll(){ saveData(); }
+
+/* EXPORT */
+function exportHTML(){
+  var html = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(data.schoolName)+'</title><style>'+document.querySelector('style').textContent.replace(/\/\*[\s\S]*?\*\//g,'')+'</style></head><body>';
+  html += document.body.innerHTML.replace(/<div id="login"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/,'').replace(/<div id="admin"[\s\S]*?<\/div>\s*<\/div>\s*<a href="#"/,'<a href="#"').replace(/<script>[\s\S]*?<\/script>/g,'');
+  html += '</body></html>';
+  var blob = new Blob([html], {type:'text/html'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bbs-website.html';
+  a.click();
+  toast('✅ Website downloaded!');
+}
+
+/* START */
+loadData();
+renderSite();
+bindForm();
+
+if(localStorage.getItem(AUTH_KEY)==='1'){
+  isAdmin = true;
+  $('login').style.display = 'none';
+  $('admin').classList.add('active');
+  document.querySelector('.float-admin').classList.remove('hidden');
+  renderAllEditors();
+  startAutoLogout();
+}
+</script>
+</body>
+</html>
