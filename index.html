@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071b46">
+<title>Admin Panel · BBS International School</title>
+<style>
+:root{
+ --navy:#071b46; --navy2:#0d2d69; --gold:#e9b52f; --gold2:#f5cc63;
+ --ink:#15213b; --muted:#68758a; --bg:#f6f8fc; --white:#fff;
+ --line:#e7ebf2; --danger:#c0392b; --green:#1e8e5a;
+ --shadow:0 18px 55px rgba(7,27,70,.12); --radius:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+button,input,select,textarea{font-family:inherit}
+a{color:inherit;text-decoration:none}
+
+/* ================= LOGIN ================= */
+#login{position:fixed;inset:0;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--navy),var(--navy2));z-index:200;padding:20px}
+.login-card{background:#fff;border-radius:22px;padding:40px 34px;width:min(400px,100%);
+  box-shadow:0 30px 80px rgba(0,0,0,.35);text-align:center}
+.login-card .logo{width:76px;height:76px;border-radius:50%;margin:0 auto 16px;
+  background:linear-gradient(135deg,var(--navy),var(--navy2));color:var(--gold2);
+  display:grid;place-items:center;font-size:30px;font-weight:800;font-family:Georgia,serif;
+  box-shadow:0 10px 30px rgba(7,27,70,.35)}
+.login-card h1{font-family:Georgia,serif;font-size:23px;color:var(--navy);margin:0 0 6px}
+.login-card p{color:var(--muted);font-size:13px;margin:0 0 24px}
+.pw-wrap{position:relative;width:100%}
+.pw-wrap input{width:100%;padding:13px 46px 13px 14px;border:1px solid var(--line);border-radius:12px;
+  font-size:14px;outline:none;background:#fbfcfe;color:var(--ink);transition:.15s}
+.pw-wrap input:focus{border-color:var(--gold);background:#fff;box-shadow:0 0 0 4px rgba(233,181,47,.15)}
+.pw-wrap .eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  background:transparent;border:0;cursor:pointer;font-size:16px;color:#8b99b0;padding:8px;border-radius:8px;transition:.15s}
+.pw-wrap .eye:hover{background:#eef2f9;color:var(--navy)}
+.login-card input.plain{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;
+  margin-bottom:12px;font-size:14px;outline:none;background:#fbfcfe;color:var(--ink);transition:.15s}
+.login-card input.plain:focus{border-color:var(--gold);background:#fff;box-shadow:0 0 0 4px rgba(233,181,47,.15)}
+.login-card .pw-wrap{margin-bottom:12px}
+.err{color:var(--danger);font-size:12.5px;min-height:17px;margin-bottom:8px;font-weight:600}
+
+/* ================= LAYOUT ================= */
+#app{display:flex;min-height:100vh}
+.sidebar{width:262px;flex:none;background:linear-gradient(180deg,var(--navy),var(--navy2));
+  color:#dbe5f7;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.side-brand{padding:22px 20px;display:flex;gap:11px;align-items:center;border-bottom:1px solid rgba(255,255,255,.09)}
+.side-brand .mark{width:44px;height:44px;border-radius:12px;background:var(--gold);color:#171717;
+  display:grid;place-items:center;font-weight:900;font-family:Georgia,serif;font-size:17px;flex:none}
+.side-brand b{display:block;font-family:Georgia,serif;font-size:15px;color:#fff;line-height:1.15}
+.side-brand span{font-size:10.5px;color:#9db0d4;letter-spacing:.5px}
+.side-nav{flex:1;overflow-y:auto;padding:12px 10px}
+.side-nav a{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:11px;
+  font-size:13.5px;font-weight:650;margin-bottom:3px;transition:.15s;cursor:pointer}
+.side-nav a:hover{background:rgba(255,255,255,.07)}
+.side-nav a.active{background:var(--gold);color:#171717;box-shadow:0 6px 18px rgba(233,181,47,.3)}
+.side-nav a .ic{font-size:15px;width:20px;text-align:center}
+.side-foot{padding:14px;border-top:1px solid rgba(255,255,255,.09);display:flex;gap:8px;flex-wrap:wrap}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top-bar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);padding:14px 26px;display:flex;align-items:center;
+  justify-content:space-between;gap:14px;flex-wrap:wrap}
+.top-bar h1{font-family:Georgia,serif;font-size:21px;color:var(--navy);margin:0}
+.top-bar .sub{font-size:12px;color:var(--muted);margin-top:3px}
+.top-actions{display:flex;gap:9px;flex-wrap:wrap}
+.content{padding:26px;max-width:1100px;width:100%}
+
+/* ================= BUTTONS ================= */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;
+  border-radius:11px;font-weight:750;font-size:13px;border:0;cursor:pointer;transition:.15s;white-space:nowrap}
+.btn.gold{background:var(--gold);color:#171717}
+.btn.gold:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn.navy{background:var(--navy);color:#fff}
+.btn.navy:hover{background:var(--navy2);transform:translateY(-1px)}
+.btn.ghost{background:#eef2f9;color:var(--navy)}
+.btn.ghost:hover{background:#e2e9f6}
+.btn.danger{background:#fdecea;color:var(--danger)}
+.btn.danger:hover{background:#f9d9d5}
+.btn.small{padding:7px 12px;font-size:12px;border-radius:9px}
+.btn.tiny{padding:5px 9px;font-size:11px;border-radius:8px}
+.btn.wide{width:100%}
+
+/* ================= CARDS / FIELDS ================= */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px;box-shadow:0 8px 26px rgba(7,27,70,.05);margin-bottom:20px}
+.card > h2{font-family:Georgia,serif;font-size:19px;color:var(--navy);margin:0 0 4px}
+.card > .desc{font-size:12.5px;color:var(--muted);margin:0 0 20px;line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field.wide{grid-column:1/-1}
+.field > label{font-size:12.5px;font-weight:750;color:var(--navy)}
+.field small{font-size:11.5px;color:#9aa6ba;line-height:1.5}
+.field input[type=text],.field input[type=password],.field textarea,.field select{
+  width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:11px;
+  font-size:13.5px;background:#fbfcfe;outline:none;color:var(--ink);transition:.15s}
+.field input:focus,.field textarea:focus,.field select:focus{
+  border-color:var(--gold);background:#fff;box-shadow:0 0 0 4px rgba(233,181,47,.13)}
+.field textarea{resize:vertical;line-height:1.6;font-family:inherit}
+.field select{cursor:pointer}
+.field .pw-wrap input{padding-right:46px}
+
+/* ================= MEDIA ================= */
+.media{border:1.5px dashed #ccd6e6;border-radius:13px;padding:12px;background:#fafcff}
+.media-prev{background:#f0f4fa;border-radius:10px;overflow:hidden;display:grid;place-items:center;
+  min-height:120px;margin-bottom:10px}
+.media-prev img,.media-prev video{max-width:100%;max-height:210px;display:block;border-radius:8px}
+.media-prev .ph{color:#a8b4c8;font-size:12.5px;font-weight:650;padding:30px 10px}
+.media-actions{display:flex;gap:8px;flex-wrap:wrap}
+.media-actions label.btn{cursor:pointer;margin:0}
+
+/* ================= LIST ================= */
+.list{display:flex;flex-direction:column;gap:14px;margin-bottom:14px}
+.list-item{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fbfcfe}
+.list-item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;
+  padding-bottom:11px;border-bottom:1px dashed #dde5f0}
+.list-item-head b{font-size:12.5px;color:var(--navy);letter-spacing:.3px;text-transform:uppercase}
+.list-item .grid{grid-template-columns:1fr 1fr}
+
+/* ================= MISC ================= */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px;
+  box-shadow:0 8px 26px rgba(7,27,70,.05);transition:.15s}
+.stat:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(7,27,70,.09)}
+.stat b{display:block;font-family:Georgia,serif;font-size:26px;color:var(--navy)}
+.stat span{font-size:11.5px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;font-weight:700}
+.note{background:#fff8e3;border:1px solid #f3e0a8;border-radius:12px;padding:13px 15px;
+  font-size:12.5px;color:#7a5c00;line-height:1.6;margin-bottom:18px}
+.note b{color:#5d4600}
+.bar{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:var(--navy);
+  color:#fff;padding:12px 22px;border-radius:12px;font-size:13px;font-weight:700;
+  box-shadow:0 16px 40px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.25s;z-index:300}
+.bar.show{opacity:1;transform:translate(-50%,0)}
+.bar.ok{background:var(--green)}
+.bar.bad{background:var(--danger)}
+.menubtn{display:none;background:var(--navy);color:#fff;border:0;border-radius:11px;
+  width:44px;height:42px;font-size:19px;cursor:pointer}
+
+@media(max-width:900px){
+  .sidebar{position:fixed;left:0;top:0;z-index:100;transform:translateX(-100%);transition:.25s}
+  .sidebar.open{transform:none;box-shadow:0 0 60px rgba(0,0,0,.4)}
+  .grid,.list-item .grid{grid-template-columns:1fr}
+  .content{padding:16px}
+  .top-bar{padding:12px 16px}
+  .menubtn{display:block}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="login">
+  <div class="login-card">
+    <div class="logo">BBS</div>
+    <h1>Admin Panel</h1>
+    <p>BBS International School · Prayagraj</p>
+    <div class="err" id="loginErr"></div>
+    <input class="plain" type="text" id="user" placeholder="Username" autocomplete="username">
+    <div class="pw-wrap">
+      <input type="password" id="pass" placeholder="Password" autocomplete="current-password">
+      <button type="button" class="eye" onclick="toggleEye('pass', this)" title="Show / Hide">👁</button>
+    </div>
+    <button class="btn gold wide" onclick="doLogin()">Sign In →</button>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+  <aside class="sidebar" id="sidebar">
+    <div class="side-brand">
+      <div class="mark">BBS</div>
+      <div>
+        <b>BBS Admin</b>
+        <span>CONTENT MANAGER</span>
+      </div>
+    </div>
+    <nav class="side-nav" id="nav"></nav>
+    <div class="side-foot">
+      <button class="btn small ghost wide" onclick="openSite()">👁 View Website</button>
+      <button class="btn small danger wide" onclick="logout()">⏻ Logout</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-bar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="menubtn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <div class="sub" id="pageSub">Manage your school website content</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn ghost" onclick="openSite()">👁 Preview</button>
+        <button class="btn gold" onclick="saveNow()">💾 Save Changes</button>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<div class="bar" id="bar"></div>
+
+<script>
+/* =========================================================
+   SECURE KEY  (do not edit)
+   ========================================================= */
+const _K = [98,98,115,64,50,48,50,52];  /* internal */
+function _defaultPw(){ return String.fromCharCode.apply(null, _K); }
+function enc(s){ try{ return btoa("bbs~" + s); } catch(e){ return ""; } }
+function dec(s){ try{ return atob(s).replace(/^bbs~/,""); } catch(e){ return ""; } }
+
+/* =========================================================
+   DEFAULT CONTENT  (mirrors index-22.html)
+   ========================================================= */
+const DEFAULT_DATA = {
+  topbar:{
+    phone:"9236008658",
+    email:"bbs international@gmail.com",
+    address:"Near Dahiyawan Mela Ground, Prayagraj - 212503"
+  },
+  brand:{
+    title:"BBS International School",
+    subtitle:"Illuminating Minds, Shaping Futures",
+    logo:""
+  },
+  nav:[
+    {label:"Home",href:"#home"},
+    {label:"About",href:"#about"},
+    {label:"Academics",href:"#academics"},
+    {label:"Facilities",href:"#facilities"},
+    {label:"Principal",href:"#principal"},
+    {label:"Gallery",href:"#gallery"}
+  ],
+  navCta:{label:"Contact",href:"#contact"},
+  hero:{
+    kicker:"Welcome to BBS International School",
+    titleHTML:'Growing <span>Bright Minds</span><br>for a Better Future.',
+    paragraph:"A welcoming learning environment where children build strong foundations through knowledge, creativity, character and confidence.",
+    bg:"",
+    btn1Text:"Explore School →", btn1Link:"#about",
+    btn2Text:"Call School", btn2Link:"tel:9236008658"
+  },
+  quick:[
+    {icon:"🎓",title:"Classes KG to 8",text:"Learning support across the foundational and middle years."},
+    {icon:"📍",title:"Prayagraj Campus",text:"Near Dahiyawan Mela Ground, Prayagraj - 212503."},
+    {icon:"📞",title:"Speak With Us",text:"9236008658 · Email"}
+  ],
+  about:{
+    eyebrow:"About the School",
+    heading:"A Place to Learn, Create & Grow",
+    subtext:"BBS International School is presented with a child-friendly campus, practical learning spaces and a focus on developing confident learners.",
+    image:"",
+    badgeTitle:"KG – Class 8",
+    badgeText:"Academic journey from kindergarten to Class 8",
+    copyHeading:"Strong foundations. Meaningful learning.",
+    copyPara:"Our school environment is designed to support curiosity, discipline, creativity and everyday learning. Students get opportunities to learn inside the classroom as well as through activities and practical experiences.",
+    points:[
+      {title:"Child-Centred Learning",text:"Encouraging curiosity, participation and confidence."},
+      {title:"Creative Activities",text:"Spaces and activities that support imagination and expression."},
+      {title:"Practical Exposure",text:"Library, science and computer learning opportunities."},
+      {title:"Positive Environment",text:"Spacious, ventilated classrooms and a welcoming campus."}
+    ]
+  },
+  academics:{
+    eyebrow:"Academics",
+    heading:"Learning With Purpose",
+    subtext:"Academic information can be expanded by the school later with curriculum details, subjects, timetable and notices.",
+    cards:[
+      {icon:"📖",title:"Foundational Learning",text:"Building strong reading, writing, numeracy and communication skills."},
+      {icon:"🔬",title:"Science Learning",text:"Encouraging observation, experiments and curiosity through practical learning."},
+      {icon:"💻",title:"Digital Skills",text:"Computer learning that helps students develop useful digital skills."},
+      {icon:"🎨",title:"Creativity",text:"Activities that give children opportunities to explore ideas and express themselves."}
+    ]
+  },
+  facilities:{
+    eyebrow:"Campus Facilities",
+    heading:"Spaces That Support Learning",
+    subtext:"Facilities shared for the school website demo.",
+    cards:[
+      {icon:"📚",title:"Well-Stocked Library",text:"A dedicated space that encourages reading and independent learning."},
+      {icon:"🧪",title:"Science Laboratory",text:"A practical learning space for science activities and demonstrations."},
+      {icon:"🖥️",title:"Computer Lab",text:"Supporting students in learning essential computer and digital skills."},
+      {icon:"🎭",title:"Activity & Creativity Rooms",text:"Dedicated spaces for activities, creativity and student participation."}
+    ]
+  },
+  principal:{
+    eyebrow:"School Leadership",
+    heading:"Meet Our Principal",
+    role:"MR PRATEEK SINGH · PRINCIPAL",
+    name:"Mr Prateek Singh",
+    labelName:"Mr Prateek Singh",
+    labelRole:"Principal · BBS International School",
+    para1:"The Principal section gives the school a clear, professional introduction for parents and visitors. Mr Prateek Singh is presented here with students to reflect the school’s connection with its learners and campus community.",
+    para2:"This demo intentionally uses the principal-with-students photograph only, as requested. Additional staff photographs can be added later if the school wants them.",
+    image:""
+  },
+  gallery:{
+    eyebrow:"Campus Gallery",
+    heading:"A Glimpse of BBS International School",
+    subtext:"Real school photographs supplied for this demo.",
+    items:[
+      {type:"image",src:"",caption:"School Campus"},
+      {type:"image",src:"",caption:"Classrooms"},
+      {type:"image",src:"",caption:"Activities"}
+    ]
+  },
+  admission:{
+    heading:"Admissions Open",
+    text:"Give your child a strong start at BBS International School. Visit the campus or call us to know more about the admission process.",
+    btnText:"Call Now →",
+    btnLink:"tel:9236008658"
+  },
+  contact:{
+    heading:"Get in Touch",
+    address:"Near Dahiyawan Mela Ground, Prayagraj - 212503",
+    phone:"9236008658",
+    email:"bbs international@gmail.com",
+    extra:"Office Hours: Monday – Saturday, 8:00 AM – 4:00 PM"
+  },
+  footer:"© BBS International School · Prayagraj · All Rights Reserved",
+  settings:{
+    siteUrl:"index-22.html",
+    password:""     /* empty → uses default encrypted key */
+  }
+};
+
+/* =========================================================
+   STATE
+   ========================================================= */
+const LS_KEY = "bbs_site_data";
+const SESSION = "bbs_admin_logged";
+let DATA = load();
+let current = "dashboard";
+let saveTimer = null;
+
+function load(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    return deepMerge(JSON.parse(JSON.stringify(DEFAULT_DATA)), JSON.parse(raw));
+  }catch(e){
+    return JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }
+}
+function deepMerge(base, over){
+  if(Array.isArray(over)) return over;
+  if(over && typeof over === "object"){
+    const out = Array.isArray(base) ? [] : {...base};
+    for(const k in over){
+      out[k] = (base && typeof base[k] === "object" && !Array.isArray(over[k]))
+        ? deepMerge(base[k], over[k]) : over[k];
+    }
+    return out;
+  }
+  return over;
+}
+function getVal(obj, path){
+  return path.split(".").reduce((o,k)=> (o==null?undefined:o[k]), obj);
+}
+function setVal(obj, path, val){
+  const keys = path.split(".");
+  let o = obj;
+  for(let i=0;i<keys.length-1;i++){
+    const k = keys[i];
+    if(o[k]==null) o[k] = /^\d+$/.test(keys[i+1]) ? [] : {};
+    o = o[k];
+  }
+  o[keys[keys.length-1]] = val;
+}
+function esc(s){
+  return String(s==null?"":s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+/* =========================================================
+   TOAST + SAVE
+   ========================================================= */
+function toast(msg, kind){
+  const b = document.getElementById("bar");
+  b.textContent = msg;
+  b.className = "bar show " + (kind||"");
+  clearTimeout(b._t);
+  b._t = setTimeout(()=> b.className = "bar", 2400);
+}
+function saveNow(silent){
+  try{
+    localStorage.setItem(LS_KEY, JSON.stringify(DATA));
+    if(!silent) toast("✓ Changes saved successfully","ok");
+  }catch(e){
+    toast("✗ Storage full! Remove some large images/videos.","bad");
+    console.error(e);
+  }
+}
+function queueSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=> saveNow(true), 600);
+}
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+function toggleEye(id, btn){
+  const inp = document.getElementById(id);
+  if(inp.type === "password"){ inp.type = "text"; btn.textContent = "🙈"; }
+  else { inp.type = "password"; btn.textContent = "👁"; }
+}
+function checkPassword(input){
+  const stored = DATA.settings && DATA.settings.password;
+  const real = (stored && stored.length) ? dec(stored) : _defaultPw();
+  return input === real;
+}
+function doLogin(){
+  const u = document.getElementById("user").value.trim();
+  const p = document.getElementById("pass").value;
+  if(u === "admin" && checkPassword(p)){
+    sessionStorage.setItem(SESSION,"1");
+    document.getElementById("loginErr").textContent = "";
+    startApp();
+  }else{
+    document.getElementById("loginErr").textContent = "❌ Invalid username or password";
+    document.getElementById("pass").value = "";
+    document.getElementById("user").focus();
+  }
+}
+document.addEventListener("keydown", e=>{
+  if(e.key === "Enter" && !document.getElementById("login").hidden) doLogin();
+});
+function logout(){
+  sessionStorage.removeItem(SESSION);
+  location.reload();
+}
+function startApp(){
+  document.getElementById("login").hidden = true;
+  document.getElementById("app").hidden = false;
+  buildNav();
+  render("dashboard");
+}
+if(sessionStorage.getItem(SESSION)) startApp();
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+const SECTIONS = [
+  {id:"dashboard", label:"Dashboard",         icon:"📊"},
+  {id:"branding",  label:"Branding & Top Bar",icon:"🏷️"},
+  {id:"hero",      label:"Hero Section",      icon:"🖼️"},
+  {id:"quick",     label:"Quick Info Strip",  icon:"⚡"},
+  {id:"about",     label:"About Section",     icon:"🏫"},
+  {id:"academics", label:"Academics",         icon:"📚"},
+  {id:"facilities",label:"Facilities",        icon:"🔬"},
+  {id:"principal", label:"Principal",         icon:"👨‍🏫"},
+  {id:"gallery",   label:"Gallery & Videos",  icon:"🎬"},
+  {id:"admission", label:"Admission CTA",     icon:"📣"},
+  {id:"contact",   label:"Contact & Footer",  icon:"📞"},
+  {id:"backup",    label:"Backup / Settings", icon:"⚙️"}
+];
+function buildNav(){
+  document.getElementById("nav").innerHTML = SECTIONS.map(s=>
+    `<a data-go="${s.id}" onclick="go('${s.id}')"><span class="ic">${s.icon}</span>${s.label}</a>`
+  ).join("");
+}
+function go(id){
+  document.getElementById("sidebar").classList.remove("open");
+  render(id);
+}
+
+/* =========================================================
+   SCHEMA
+   ========================================================= */
+const SCHEMA = {
+  branding:[
+    {type:"group", label:"Top Bar", fields:[
+      {path:"topbar.phone",   label:"Phone Number", type:"text"},
+      {path:"topbar.email",   label:"Email Address", type:"text"},
+      {path:"topbar.address", label:"Address", type:"text", wide:true}
+    ]},
+    {type:"group", label:"School Identity", fields:[
+      {path:"brand.logo",     label:"School Logo", type:"image",
+       hint:"Recommended: square PNG, at least 200×200px"},
+      {path:"brand.title",    label:"School Name", type:"text"},
+      {path:"brand.subtitle", label:"Tagline", type:"text", wide:true}
+    ]},
+    {type:"group", label:"Navigation Menu", fields:[
+      {path:"nav", label:"Menu Links", type:"list", itemLabel:"Link",
+       itemFields:[
+         {key:"label", label:"Label", type:"text"},
+         {key:"href",  label:"Link (e.g. #about)", type:"text"}
+       ]},
+      {path:"navCta.label", label:"Contact Button Text", type:"text"},
+      {path:"navCta.href",  label:"Contact Button Link", type:"text"}
+    ]}
+  ],
+
+  hero:[
+    {type:"group", label:"Hero Content", fields:[
+      {path:"hero.kicker",    label:"Small Kicker Text", type:"text", wide:true},
+      {path:"hero.titleHTML", label:"Main Heading (HTML allowed)", type:"textarea", rows:3, wide:true,
+       hint:'Use <span>…</span> for the gold highlight and <br> to break a line.'},
+      {path:"hero.paragraph", label:"Paragraph", type:"textarea", rows:3, wide:true},
+      {path:"hero.bg",        label:"Background Image", type:"image", wide:true,
+       hint:"Large landscape photo works best (1600×900 or bigger)"},
+      {path:"hero.btn1Text",  label:"Button 1 Text", type:"text"},
+      {path:"hero.btn1Link",  label:"Button 1 Link", type:"text"},
+      {path:"hero.btn2Text",  label:"Button 2 Text", type:"text"},
+      {path:"hero.btn2Link",  label:"Button 2 Link", type:"text"}
+    ]}
+  ],
+
+  quick:[
+    {type:"group", label:"Quick Info Strip (3 boxes)", fields:[
+      {path:"quick", label:"Items", type:"list", itemLabel:"Box",
+       itemFields:[
+         {key:"icon",  label:"Icon (emoji)", type:"text"},
+         {key:"title", label:"Title", type:"text"},
+         {key:"text",  label:"Description", type:"text", wide:true}
+       ]}
+    ]}
+  ],
+
+  about:[
+    {type:"group", label:"Section Heading", fields:[
+      {path:"about.eyebrow", label:"Eyebrow", type:"text"},
+      {path:"about.heading", label:"Heading", type:"text"},
+      {path:"about.subtext", label:"Sub Text", type:"textarea", rows:2, wide:true}
+    ]},
+    {type:"group", label:"Left Photo", fields:[
+      {path:"about.image",      label:"Photo", type:"image", wide:true},
+      {path:"about.badgeTitle", label:"Badge Title", type:"text"},
+      {path:"about.badgeText",  label:"Badge Subtitle", type:"text"}
+    ]},
+    {type:"group", label:"Right Copy", fields:[
+      {path:"about.copyHeading", label:"Small Heading", type:"text", wide:true},
+      {path:"about.copyPara",    label:"Paragraph", type:"textarea", rows:4, wide:true}
+    ]},
+    {type:"group", label:"Feature Points", fields:[
+      {path:"about.points", label:"Points", type:"list", itemLabel:"Point",
+       itemFields:[
+         {key:"title", label:"Title", type:"text"},
+         {key:"text",  label:"Description", type:"text", wide:true}
+       ]}
+    ]}
+  ],
+
+  academics:[
+    {type:"group", label:"Section Heading", fields:[
+      {path:"academics.eyebrow", label:"Eyebrow", type:"text"},
+      {path:"academics.heading", label:"Heading", type:"text"},
+      {path:"academics.subtext", label:"Sub Text", type:"textarea", rows:2, wide:true}
+    ]},
+    {type:"group", label:"Cards", fields:[
+      {path:"academics.cards", label:"Academic Cards", type:"list", itemLabel:"Card",
+       itemFields:[
+         {key:"icon",  label:"Icon (emoji)", type:"text"},
+         {key:"title", label:"Title", type:"text"},
+         {key:"text",  label:"Description", type:"textarea", rows:2, wide:true}
+       ]}
+    ]}
+  ],
+
+  facilities:[
+    {type:"group", label:"Section Heading", fields:[
+      {path:"facilities.eyebrow", label:"Eyebrow", type:"text"},
+      {path:"facilities.heading", label:"Heading", type:"text"},
+      {path:"facilities.subtext", label:"Sub Text", type:"textarea", rows:2, wide:true}
+    ]},
+    {type:"group", label:"Facility Cards", fields:[
+      {path:"facilities.cards", label:"Facilities", type:"list", itemLabel:"Card",
+       itemFields:[
+         {key:"icon",  label:"Icon (emoji)", type:"text"},
+         {key:"title", label:"Title", type:"text"},
+         {key:"text",  label:"Description", type:"textarea", rows:2, wide:true}
+       ]}
+    ]}
+  ],
+
+  principal:[
+    {type:"group", label:"Section Heading", fields:[
+      {path:"principal.eyebrow", label:"Eyebrow", type:"text"},
+      {path:"principal.heading", label:"Heading", type:"text"},
+      {path:"principal.role",    label:"Role Line", type:"text", wide:true}
+    ]},
+    {type:"group", label:"Photo & Label", fields:[
+      {path:"principal.image",     label:"Principal Photo", type:"image", wide:true},
+      {path:"principal.labelName", label:"Photo Label – Name", type:"text"},
+      {path:"principal.labelRole", label:"Photo Label – Role", type:"text"}
+    ]},
+    {type:"group", label:"Message", fields:[
+      {path:"principal.para1", label:"Paragraph 1", type:"textarea", rows:4, wide:true},
+      {path:"principal.para2", label:"Paragraph 2", type:"textarea", rows:4, wide:true},
+      {path:"principal.name",  label:"Signature Name", type:"text", wide:true}
+    ]}
+  ],
+
+  gallery:[
+    {type:"group", label:"Section Heading", fields:[
+      {path:"gallery.eyebrow", label:"Eyebrow", type:"text"},
+      {path:"gallery.heading", label:"Heading", type:"text"},
+      {path:"gallery.subtext", label:"Sub Text", type:"textarea", rows:2, wide:true}
+    ]},
+    {type:"group", label:"Photos & Videos", fields:[
+      {path:"gallery.items", label:"Gallery Items", type:"list", itemLabel:"Item",
+       itemFields:[
+         {key:"type",    label:"Type", type:"select", options:["image","video"]},
+         {key:"caption", label:"Caption", type:"text"},
+         {key:"src",     label:"File / Media", type:"media", wide:true,
+          hint:"Images auto-compress. For long videos prefer a direct MP4 link if the file is large."}
+       ]}
+    ]}
+  ],
+
+  admission:[
+    {type:"group", label:"Call To Action Block", fields:[
+      {path:"admission.heading", label:"Heading", type:"text"},
+      {path:"admission.text",    label:"Text", type:"textarea", rows:3, wide:true},
+      {path:"admission.btnText", label:"Button Text", type:"text"},
+      {path:"admission.btnLink", label:"Button Link", type:"text"}
+    ]}
+  ],
+
+  contact:[
+    {type:"group", label:"Contact Details", fields:[
+      {path:"contact.heading", label:"Heading", type:"text", wide:true},
+      {path:"contact.address", label:"Address", type:"text", wide:true},
+      {path:"contact.phone",   label:"Phone", type:"text"},
+      {path:"contact.email",   label:"Email", type:"text"},
+      {path:"contact.extra",   label:"Extra Line (office hours etc.)", type:"text", wide:true}
+    ]},
+    {type:"group", label:"Footer", fields:[
+      {path:"footer", label:"Footer Text", type:"text", wide:true}
+    ]}
+  ]
+};
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+function render(id){
+  current = id;
+  const sec = SECTIONS.find(s=>s.id===id);
+  document.getElementById("pageTitle").textContent = sec ? sec.label : "Dashboard";
+  document.getElementById("pageSub").textContent =
+    id === "dashboard" ? "Manage your school website content"
+    : "Edit the fields below — changes save automatically";
+  document.querySelectorAll(".side-nav a").forEach(a=>
+    a.classList.toggle("active", a.dataset.go===id));
+
+  const c = document.getElementById("content");
+  if(id === "dashboard"){ c.innerHTML = dashboardHTML(); return; }
+  if(id === "backup"){ c.innerHTML = backupHTML(); return; }
+
+  const groups = SCHEMA[id] || [];
+  c.innerHTML = groups.map(g=>`
+    <div class="card">
+      <h2>${g.label}</h2>
+      <div class="grid">${g.fields.map(renderField).join("")}</div>
+    </div>
+  `).join("") + `<button class="btn gold" onclick="saveNow()">💾 Save Changes</button>`;
+}
+
+function renderField(f){
+  const val = getVal(DATA, f.path);
+  const id = "f_" + f.path.replace(/[.\-]/g,"_");
+
+  if(f.type === "list"){
+    const arr = Array.isArray(val) ? val : [];
+    const items = arr.map((it,i)=>`
+      <div class="list-item">
+        <div class="list-item-head">
+          <b>${esc(f.itemLabel||"Item")} ${i+1}</b>
+          <button class="btn tiny danger" data-del="${f.path}.${i}">🗑 Delete</button>
+        </div>
+        <div class="grid">
+          ${f.itemFields.map(sf=>renderField({
+            ...sf,
+            path: f.path+"."+i+"."+sf.key
+          })).join("")}
+        </div>
+      </div>`).join("");
+
+    return `<div class="field wide">
+      <label>${esc(f.label)}</label>
+      <div class="list">${items || `<div class="note">No items yet. Click “Add” below.</div>`}</div>
+      <button class="btn small gold" data-add="${f.path}" data-itemlabel="${esc(f.itemLabel||'Item')}">
+        + Add ${esc(f.itemLabel||"Item")}
+      </button>
+    </div>`;
+  }
+
+  if(f.type === "image" || f.type === "media"){
+    const accept = f.type === "image" ? "image/*" : "image/*,video/*";
+    const isVideo = val && (val.startsWith("data:video") || /\.(mp4|webm|ogv|mov)(\?|$)/i.test(val));
+    const prev = val
+      ? (isVideo ? `<video src="${esc(val)}" controls></video>`
+                 : `<img src="${esc(val)}" alt="">`)
+      : `<div class="ph">No ${f.type==="image"?"image":"media"} selected</div>`;
+    return `<div class="field ${f.wide?"wide":""}">
+      <label>${esc(f.label)}</label>
+      <div class="media">
+        <div class="media-prev">${prev}</div>
+        <div class="media-actions">
+          <label class="btn small navy">⬆ Upload
+            <input type="file" hidden accept="${accept}"
+              data-upload="${f.path}" data-kind="${f.type}">
+          </label>
+          ${val ? `<button class="btn small danger" data-clear="${f.path}">✕ Remove</button>` : ""}
+        </div>
+      </div>
+      ${f.hint ? `<small>${esc(f.hint)}</small>` : ""}
+    </div>`;
+  }
+
+  if(f.type === "textarea"){
+    return `<div class="field ${f.wide?"wide":""}">
+      <label>${esc(f.label)}</label>
+      <textarea id="${id}" rows="${f.rows||4}" data-path="${f.path}">${esc(val)}</textarea>
+      ${f.hint ? `<small>${esc(f.hint)}</small>` : ""}
+    </div>`;
+  }
+
+  if(f.type === "select"){
+    return `<div class="field ${f.wide?"wide":""}">
+      <label>${esc(f.label)}</label>
+      <select data-path="${f.path}">
+        ${f.options.map(o=>`<option value="${esc(o)}" ${val===o?"selected":""}>${esc(o)}</option>`).join("")}
+      </select>
+    </div>`;
+  }
+
+  return `<div class="field ${f.wide?"wide":""}">
+    <label>${esc(f.label)}</label>
+    <input id="${id}" type="text" data-path="${f.path}" value="${esc(val)}">
+    ${f.hint ? `<small>${esc(f.hint)}</small>` : ""}
+  </div>`;
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+function dashboardHTML(){
+  const count = (p)=> Array.isArray(getVal(DATA,p)) ? getVal(DATA,p).length : 0;
+  const bytes = new Blob([JSON.stringify(DATA)]).size;
+  return `
+  <div class="stats">
+    <div class="stat"><b>${count("nav")}</b><span>Menu Links</span></div>
+    <div class="stat"><b>${count("about.points")}</b><span>About Points</span></div>
+    <div class="stat"><b>${count("academics.cards")}</b><span>Academic Cards</span></div>
+    <div class="stat"><b>${count("facilities.cards")}</b><span>Facilities</span></div>
+    <div class="stat"><b>${count("gallery.items")}</b><span>Gallery Items</span></div>
+    <div class="stat"><b>${(bytes/1024).toFixed(0)} KB</b><span>Data Used</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Welcome to the BBS Admin Panel 👋</h2>
+    <p class="desc">Everything on the school website can be edited from here — text, photos and videos.</p>
+    <div class="note">
+      <b>How it works:</b> Changes save automatically to this browser. Use the
+      <b>Preview</b> button to see the website with your edits. When you're happy,
+      go to <b>Backup / Settings</b> and export a JSON file to keep a permanent copy.
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label>Quick Links</label>
+        <button class="btn navy wide" onclick="go('hero')">🖼️ Edit Hero Section</button>
+        <div style="height:9px"></div>
+        <button class="btn navy wide" onclick="go('gallery')">🎬 Manage Gallery & Videos</button>
+        <div style="height:9px"></div>
+        <button class="btn navy wide" onclick="go('contact')">📞 Update Contact Details</button>
+      </div>
+      <div class="field">
+        <label>Site Actions</label>
+        <button class="btn gold wide" onclick="openSite()">👁 Open Website Preview</button>
+        <div style="height:9px"></div>
+        <button class="btn ghost wide" onclick="go('backup')">⚙️ Backup & Export</button>
+        <div style="height:9px"></div>
+        <button class="btn danger wide" onclick="resetAll()">↺ Reset to Original Content</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   BACKUP / SETTINGS
+   ========================================================= */
+function backupHTML(){
+  const bytes = new Blob([JSON.stringify(DATA)]).size;
+  return `
+  <div class="card">
+    <h2>Website Link</h2>
+    <p class="desc">The page that opens when you press “Preview”.</p>
+    <div class="grid">
+      <div class="field wide">
+        <label>Website File / URL</label>
+        <input type="text" data-path="settings.siteUrl" value="${esc(DATA.settings.siteUrl)}">
+        <small>Default is <b>index-22.html</b>. Change if your main page has a different name.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔐 Change Admin Password</h2>
+    <p class="desc">Leave both fields blank if you don’t want to change it.</p>
+    <div class="grid">
+      <div class="field">
+        <label>New Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="pw1" placeholder="Enter new password" autocomplete="new-password">
+          <button type="button" class="eye" onclick="toggleEye('pw1', this)" title="Show / Hide">👁</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Confirm New Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="pw2" placeholder="Re-enter password" autocomplete="new-password">
+          <button type="button" class="eye" onclick="toggleEye('pw2', this)" title="Show / Hide">👁</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <button class="btn gold" onclick="changePassword()">🔒 Update Password</button>
+    </div>
+    <div class="note" style="margin-top:16px;margin-bottom:0">
+      <b>Forgot password?</b> Clear site data from your browser settings, then reopen this page — it will reset to the factory default.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Backup & Restore</h2>
+    <p class="desc">Current data size: <b>${(bytes/1024).toFixed(1)} KB</b></p>
+    <div class="note">
+      <b>Important:</b> Content is stored inside this browser (localStorage).
+      Clearing browser data will erase it. Always keep an exported backup file.
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label>Export</label>
+        <button class="btn navy wide" onclick="exportJSON()">⬇ Download Backup (.json)</button>
+        <div style="height:9px"></div>
+        <button class="btn ghost wide" onclick="copyJSON()">📋 Copy JSON to Clipboard</button>
+      </div>
+      <div class="field">
+        <label>Import</label>
+        <label class="btn gold wide">⬆ Restore from Backup
+          <input type="file" accept="application/json,.json" hidden onchange="importJSON(this)">
+        </label>
+        <div style="height:9px"></div>
+        <button class="btn danger wide" onclick="resetAll()">↺ Reset Everything</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   PASSWORD CHANGE
+   ========================================================= */
+function changePassword(){
+  const a = document.getElementById("pw1").value;
+  const b = document.getElementById("pw2").value;
+
+  if(!a && !b) return toast("No changes made","ok");
+  if(!a || !b) return toast("✗ Please fill both password fields","bad");
+  if(a !== b) return toast("✗ Passwords do not match","bad");
+  if(a.length < 4) return toast("✗ Password must be at least 4 characters","bad");
+
+  DATA.settings.password = enc(a);
+  saveNow(true);
+  document.getElementById("pw1").value = "";
+  document.getElementById("pw2").value = "";
+  toast("✓ Admin password updated","ok");
+}
+
+/* =========================================================
+   EVENTS
+   ========================================================= */
+const contentEl = document.getElementById("content");
+
+contentEl.addEventListener("input", e=>{
+  const t = e.target;
+  if(t.dataset.path){
+    setVal(DATA, t.dataset.path, t.value);
+    queueSave();
+  }
+});
+
+contentEl.addEventListener("change", e=>{
+  const t = e.target;
+  if(t.tagName === "SELECT" && t.dataset.path){
+    setVal(DATA, t.dataset.path, t.value);
+    queueSave();
+  }
+  if(t.dataset.upload){
+    handleUpload(t);
+  }
+});
+
+contentEl.addEventListener("click", e=>{
+  const add = e.target.closest("[data-add]");
+  if(add){
+    const path = add.dataset.add;
+    const arr = getVal(DATA, path) || [];
+    arr.push(defaultItemFor(path));
+    setVal(DATA, path, arr);
+    saveNow(true);
+    render(current);
+    return;
+  }
+  const del = e.target.closest("[data-del]");
+  if(del){
+    const parts = del.dataset.del.split(".");
+    const idx = +parts.pop();
+    const arr = getVal(DATA, parts.join("."));
+    if(Array.isArray(arr)){
+      if(!confirm("Delete this item?")) return;
+      arr.splice(idx,1);
+      saveNow(true);
+      render(current);
+    }
+    return;
+  }
+  const clr = e.target.closest("[data-clear]");
+  if(clr){
+    if(!confirm("Remove this media file?")) return;
+    setVal(DATA, clr.dataset.clear, "");
+    saveNow(true);
+    render(current);
+  }
+});
+
+function defaultItemFor(path){
+  if(path === "nav")             return {label:"New Link", href:"#section"};
+  if(path === "quick")           return {icon:"⭐", title:"New Box", text:"Description here."};
+  if(path === "about.points")    return {title:"New Point", text:"Description here."};
+  if(path === "academics.cards") return {icon:"📘", title:"New Card", text:"Description here."};
+  if(path === "facilities.cards")return {icon:"🏫", title:"New Card", text:"Description here."};
+  if(path === "gallery.items")   return {type:"image", src:"", caption:"New Photo"};
+  return {};
+}
+
+/* =========================================================
+   UPLOAD
+   ========================================================= */
+async function handleUpload(input){
+  const file = input.files && input.files[0];
+  if(!file) return;
+  const path = input.dataset.upload;
+  const kind = input.dataset.kind;
+  toast("⏳ Processing file…");
+
+  try{
+    let dataUrl;
+    if(kind === "image" || file.type.startsWith("image/")){
+      dataUrl = await compressImage(file);
+    }else{
+      if(file.size > 6 * 1024 * 1024){
+        const ok = confirm(
+          "This video is " + (file.size/1024/1024).toFixed(1) +
+          " MB. Large videos may exceed browser storage.\n\nContinue anyway?"
+        );
+        if(!ok){ input.value = ""; return; }
+      }
+      dataUrl = await readAsDataURL(file);
+    }
+    setVal(DATA, path, dataUrl);
+    saveNow(true);
+    render(current);
+    toast("✓ Upload complete","ok");
+  }catch(err){
+    console.error(err);
+    toast("✗ Upload failed","bad");
+  }
+  input.value = "";
+}
+
+function readAsDataURL(file){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = ()=> res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function compressImage(file, maxW = 1600, maxH = 1600, quality = 0.82){
+  return new Promise((resolve, reject)=>{
+    if(file.type === "image/png" && file.size < 350 * 1024){
+      return readAsDataURL(file).then(resolve).catch(reject);
+    }
+    const reader = new FileReader();
+    reader.onload = ev=>{
+      const img = new Image();
+      img.onload = ()=>{
+        let w = img.naturalWidth, h = img.naturalHeight;
+        const ratio = Math.min(maxW/w, maxH/h, 1);
+        w = Math.round(w * ratio);
+        h = Math.round(h * ratio);
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0,0,w,h);
+        ctx.drawImage(img,0,0,w,h);
+        const isPng = file.type === "image/png";
+        resolve(canvas.toDataURL(isPng ? "image/png" : "image/jpeg", quality));
+      };
+      img.onerror = reject;
+      img.src = ev.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/* =========================================================
+   BACKUP HELPERS
+   ========================================================= */
+function exportJSON(){
+  const blob = new Blob([JSON.stringify(DATA, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "bbs-website-backup-" + new Date().toISOString().slice(0,10) + ".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("✓ Backup downloaded","ok");
+}
+function copyJSON(){
+  navigator.clipboard.writeText(JSON.stringify(DATA))
+    .then(()=> toast("✓ Copied to clipboard","ok"))
+    .catch(()=> toast("✗ Copy failed","bad"));
+}
+function importJSON(input){
+  const file = input.files[0];
+  if(!file) return;
+  const r = new FileReader();
+  r.onload = e=>{
+    try{
+      const parsed = JSON.parse(e.target.result);
+      DATA = deepMerge(JSON.parse(JSON.stringify(DEFAULT_DATA)), parsed);
+      saveNow(true);
+      render(current);
+      toast("✓ Backup restored","ok");
+    }catch(err){
+      toast("✗ Invalid backup file","bad");
+    }
+  };
+  r.readAsText(file);
+  input.value = "";
+}
+function resetAll(){
+  if(!confirm("Reset ALL content back to the original? This cannot be undone.")) return;
+  DATA = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  saveNow(true);
+  render(current);
+  toast("↺ Content reset to original","ok");
+}
+
+/* =========================================================
+   OPEN SITE
+   ========================================================= */
+function openSite(){
+  saveNow(true);
+  const url = (DATA.settings && DATA.settings.siteUrl) || "index-22.html";
+  window.open(url, "_blank");
+}
+</script>
+</body>
+</html>
